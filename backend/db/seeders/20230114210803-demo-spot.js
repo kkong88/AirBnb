@@ -13,15 +13,16 @@ module.exports = {
     {
       ownerId: 1,
       address: '1 chestnut pl',
-      // city:'Boston',
-      // state:'Ma',
-      // country: "United states",
-      // lat: 8.88,
-      // lng: 1.23,
-      // name: 'test',
-      // price: 5.99,
-      // avgRating: 4.6,
-      // previewImage: "test.url"
+      city:'Boston',
+      state:'Ma',
+      country: "United states",
+      lat: 8.88,
+      lng: 1.23,
+      name: 'test',
+      price: 5.99,
+      avgRating: 4.6,
+      previewImage: "test.url",
+      description: 'Test'
     }
   ],{})
     /**
