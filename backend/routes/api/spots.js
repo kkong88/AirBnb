@@ -3,6 +3,7 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { Spot, Sequelize } = require('../../db/models');
 const { User } = require('../../db/models');
 const { Review } = require('../../db/models')
+const { SpotImage } = require('../../db/models')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const spot = require('../../db/models/spot');
@@ -36,6 +37,10 @@ router.get('/:id', async (req, res) => {
             attributes: ['id', 'firstName', 'lastName']
         },
         {
+            model: SpotImage,
+            attributes: ['spotId','image']
+        },
+        {
             model: Review,
             attributes: [],
             subQuery: false
@@ -63,7 +68,7 @@ router.post('/', async (req, res) => {
             price: price,
             ownerId: req.user.id,
         })
-        return res.json({newSpot})
+        return res.status(201).json({message: 'Successfully created', data: newSpot})
     }
       catch {
         const err = new Error('Validation Error')
