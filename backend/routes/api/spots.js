@@ -1,11 +1,13 @@
 const express = require('express')
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot } = require('../../db/models');
-const { User } = require('../../db/models')
+const { Spot, Sequelize } = require('../../db/models');
+const { User } = require('../../db/models');
+const { Review } = require('../../db/models')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const spot = require('../../db/models/spot');
 const { where } = require('sequelize');
+const review = require('../../db/models/review');
 const router = express.Router();
 
 
@@ -13,6 +15,7 @@ router.get('/', async(req,res)=>{
     const spots = await Spot.findAll()
     res.json({spots})
 })
+
 router.get('/current', async (req, res) => {
     const current = await Spot.findAll({
         where: { ownerId: req.user.id }
@@ -22,7 +25,23 @@ router.get('/current', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const spotId = req.params.id
-    const spot = await Spot.findByPk(spotId)
+    const spot = await Spot.findByPk(spotId, {
+        attributes: {
+            include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.star')),'avgStarRating'],[Sequelize.fn('COUNT', Sequelize.col('Reviews.id')),'numReviews']]
+        },
+        include: [
+        {
+            model: User,
+            as: 'Owner',
+            attributes: ['id', 'firstName', 'lastName']
+        },
+        {
+            model: Review,
+            attributes: [],
+            subQuery: false
+        }
+    ]
+    })
     res.json({spot})
 })
 
@@ -42,7 +61,7 @@ router.post('/', async (req, res) => {
             name: name,
             description: description,
             price: price,
-            ownerId: req.user.id
+            ownerId: req.user.id,
         })
         return res.json({newSpot})
     }
