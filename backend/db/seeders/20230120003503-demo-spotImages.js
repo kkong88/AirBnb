@@ -11,11 +11,13 @@ module.exports = {
   return queryInterface.bulkInsert(options, [
     {
       spotId: 1,
-      image: 'http://randomImageURL'
+      image: 'http://randomImageURL',
+      preview: true
     },
     {
       spotId: 2,
-      image: 'http://testURL'
+      image: 'http://testURL',
+      preview: true
     }
   ])
     /**

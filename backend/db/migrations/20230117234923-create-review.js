@@ -17,20 +17,22 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull:false,
-        references: {model: 'Users'}
+        references: {model: 'Users'},
+        onDelete: 'CASCADE'
       },
       spotId: {
         type: Sequelize.INTEGER,
         allowNull:false,
-        references: {model: 'Spots'}
+        references: {model: 'Spots'},
+        onDelete: 'CASCADE'
       },
       review: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull:false,
       },
       star: {
         type: Sequelize.INTEGER,
-        allowNull:false
+        allowNull:false,
       },
       createdAt: {
         allowNull: false,
