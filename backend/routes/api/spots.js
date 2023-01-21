@@ -189,4 +189,24 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Successfully deleted'})
 })
 
+router.put('/:spotId', async(req,res)=> {
+    const {address, city, state, country, lat, lng, name, description, price} = req.body
+    let spot = await Spot.findByPk(req.params.spotId)
+    spot.update({
+        address: address,
+        city: city,
+        state: state,
+        country: country,
+        lat: lat,
+        lng: lng,
+        name: name,
+        description: description,
+        price: price,
+    })
+    if(!spot){
+        res.status(404).json({message: "Spot not found"})
+    }
+    await spot.save()
+    res.json(spot)
+})
 module.exports = router;
