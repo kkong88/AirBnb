@@ -65,12 +65,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL,
       allowNull: false
     },
-    avgRating: {
-      type: DataTypes.DECIMAL
-    },
-    previewImage:{
-      type: DataTypes.STRING
-    }
+    // avgRating: {
+    //   type: DataTypes.DECIMAL
+    // },
+    // previewImage:{
+    //   type: DataTypes.STRING
+    // }
   }, {
     sequelize,
     modelName: 'Spot',

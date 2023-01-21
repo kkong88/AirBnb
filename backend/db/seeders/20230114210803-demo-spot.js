@@ -20,8 +20,8 @@ module.exports = {
       lng: 1.23,
       name: 'test',
       price: 5.99,
-      avgRating: 4.6,
-      previewImage: "test.url",
+      // avgRating: 4.6,
+      // previewImage: "test.url",
       description: 'Test'
     },
     {
@@ -34,8 +34,8 @@ module.exports = {
       lng: 13.13,
       name: 'test',
       price: 10.99,
-      avgRating: 4.8,
-      previewImage: "test.url",
+      // avgRating: 4.8,
+      // previewImage: "test.url",
       description: 'Test'
     },
     {
@@ -48,8 +48,8 @@ module.exports = {
       lng: 19.23,
       name: 'test',
       price: 16.00,
-      avgRating: 4.2,
-      previewImage: "test.url",
+      // avgRating: 4.2,
+      // previewImage: "test.url",
       description: 'Test'
     }
   ],{})

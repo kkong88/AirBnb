@@ -15,9 +15,14 @@ module.exports = {
       preview: true
     },
     {
-      spotId: 2,
+      spotId: 1,
       image: 'http://testURL',
       preview: true
+    },
+    {
+    spotId: 2,
+    image: 'testURl',
+    preview: true
     }
   ])
     /**
