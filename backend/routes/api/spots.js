@@ -15,7 +15,12 @@ const router = express.Router();
 
 // Get all spots
 router.get('/', async(req,res)=>{
-    const spots = await Spot.findAll()
+    const spots = await Spot.findAll({
+        attributes: {
+        include:
+        [[sequelize.literal(`(SELECT image FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`]],
+        }
+    })
     res.json({spots})
 })
 // Get current users
@@ -189,7 +194,7 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Successfully deleted'})
 })
 
-router.put('/:spotId', async(req,res)=> {
+router.put('/:spotId', async (req,res)=> {
     const {address, city, state, country, lat, lng, name, description, price} = req.body
     let spot = await Spot.findByPk(req.params.spotId)
     spot.update({
@@ -209,4 +214,6 @@ router.put('/:spotId', async(req,res)=> {
     await spot.save()
     res.json(spot)
 })
+
+
 module.exports = router;
