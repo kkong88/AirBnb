@@ -4,6 +4,7 @@ const { Spot } = require('../../db/models');
 const { User } = require('../../db/models');
 const { Review } = require('../../db/models')
 const { SpotImage } = require('../../db/models')
+const { reviewImage } = require('../../db/models')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const spot = require('../../db/models/spot');
@@ -215,5 +216,25 @@ router.put('/:spotId', async (req,res)=> {
     res.json(spot)
 })
 
+
+// router.get('/:id/reviews', async (req,res) => {
+//     const reviews = await Review.findByPk(req.params.id,{
+//         include: [
+//             {
+//                 model: User,
+//                 attributes: ['id','firstName','lastName']
+//             },{
+//             model: reviewImage,
+//             attributes: {
+//                 exclude: ['createdAt','updatedAt']
+//             }
+//             }
+//         ]
+//     })
+//     if(!reviews){
+//         res.status(404).json({message: "Spot couldn't be found"})
+//     }
+//     res.json({reviews})
+// })
 
 module.exports = router;

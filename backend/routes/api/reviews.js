@@ -40,7 +40,7 @@ router.get('/current', async (req, res)=> {
     res.json({reviews})
 })
 
-router.get('/:id/reviews', async (req,res) => {
+router.get('/spots/:id/reviews', async (req,res) => {
     const reviews = await Review.findByPk(req.params.id,{
         include: [
             {
