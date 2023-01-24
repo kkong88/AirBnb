@@ -54,6 +54,9 @@ router.get('/:id/reviews', async (req,res) => {
             }
         ]
     })
+    if(!reviews){
+        res.status(404).json({message: "Spot couldn't be found"})
+    }
     res.json({reviews})
 })
 
