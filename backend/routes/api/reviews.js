@@ -25,7 +25,7 @@ router.get('/current', async (req, res)=> {
          model: Spot,
          attributes: {
             include:
-            [[sequelize.literal(`(SELECT image FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`]],
+            [[sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`]],
             exclude: ['createdAt', 'updatedAt']
         }
          },
@@ -40,24 +40,6 @@ router.get('/current', async (req, res)=> {
     res.json({reviews})
 })
 
-router.get('/spots/:id/reviews', async (req,res) => {
-    const reviews = await Review.findByPk(req.params.id,{
-        include: [
-            {
-                model: User,
-                attributes: ['id','firstName','lastName']
-            },{
-            model: reviewImage,
-            attributes: {
-                exclude: ['createdAt','updatedAt']
-            }
-            }
-        ]
-    })
-    if(!reviews){
-        res.status(404).json({message: "Spot couldn't be found"})
-    }
-    res.json({reviews})
-})
+
 
 module.exports = router;

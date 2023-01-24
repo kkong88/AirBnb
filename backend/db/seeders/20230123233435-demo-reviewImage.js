@@ -12,15 +12,15 @@ module.exports = {
   return queryInterface.bulkInsert(options, [
     {
       reviewId: 1,
-      image: "http://test.url.org"
+      url: "http://test.url.org"
     },
     {
       reviewId: 1,
-      image: "http://test2.url.org"
+      url: "http://test2.url.org"
     },
     {
       reviewId: 2,
-      image: "https://test3.url.org"
+      url: "https://test3.url.org"
     }
   ])
     /**

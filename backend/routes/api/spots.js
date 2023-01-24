@@ -217,24 +217,24 @@ router.put('/:spotId', async (req,res)=> {
 })
 
 
-// router.get('/:id/reviews', async (req,res) => {
-//     const reviews = await Review.findByPk(req.params.id,{
-//         include: [
-//             {
-//                 model: User,
-//                 attributes: ['id','firstName','lastName']
-//             },{
-//             model: reviewImage,
-//             attributes: {
-//                 exclude: ['createdAt','updatedAt']
-//             }
-//             }
-//         ]
-//     })
-//     if(!reviews){
-//         res.status(404).json({message: "Spot couldn't be found"})
-//     }
-//     res.json({reviews})
-// })
+router.get('/:id/reviews', async (req,res) => {
+    const reviews = await Review.findByPk(req.params.id,{
+        include: [
+            {
+                model: User,
+                attributes: ['id','firstName','lastName']
+            },{
+            model: reviewImage,
+            attributes: {
+                exclude: ['reviewId','createdAt','updatedAt']
+            }
+            }
+        ]
+    })
+    if(!reviews){
+        res.status(404).json({message: "Spot couldn't be found"})
+    }
+    res.json({reviews})
+})
 
 module.exports = router;

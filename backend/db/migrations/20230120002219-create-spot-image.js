@@ -22,7 +22,7 @@ module.exports = {
         references: {model: 'Spots'},
         onDelete: 'CASCADE'
       },
-      image: {
+      url: {
         type: Sequelize.STRING,
       },
       preview: {

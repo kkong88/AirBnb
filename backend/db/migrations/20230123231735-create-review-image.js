@@ -19,7 +19,7 @@ module.exports = {
         references: {model: 'Reviews'},
         onDelete: 'CASCADE'
       },
-      image: {
+      url: {
         type: Sequelize.STRING
       },
       createdAt: {
