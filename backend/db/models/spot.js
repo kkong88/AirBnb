@@ -59,11 +59,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
      type: DataTypes.STRING,
-     allowNull: false
     },
     price: {
       type: DataTypes.DECIMAL,
-      allowNull: false
     },
     // avgRating: {
     //   type: DataTypes.DECIMAL

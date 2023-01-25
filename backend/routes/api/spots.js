@@ -11,21 +11,84 @@ const spot = require('../../db/models/spot');
 const sequelize = require('sequelize');
 const review = require('../../db/models/review');
 const spotimage = require('../../db/models/spotimage');
+const { JsonWebTokenError } = require('jsonwebtoken');
 const router = express.Router();
 
+const validSpot = [
+    check('address')
+        .exists({checkFalsy: true})
+        .notEmpty()
+        .withMessage('Street address is require'),
+    check('city')
+        .exists({checkFalsy: true})
+        .notEmpty()
+        .withMessage("City is required"),
+    check('state')
+        .exists({checkFalsy: true})
+        .notEmpty()
+        .withMessage('State is required'),
+    check('country')
+        .exists({checkFalsy: true})
+        .notEmpty()
+        .withMessage('Country is required'),
+    check('lat')
+        .exists({checkFalsy:true})
+        .notEmpty()
+        .isDecimal({checkFalsy:true})
+        .toFloat()
+        .withMessage('Latitude is not valid'),
+    check('lng')
+        .exists({checkFalsy:true})
+        .notEmpty()
+        .isDecimal({checkFalsy:true})
+        .toFloat()
+        .withMessage('Longitude is not valid'),
+    check('name')
+        .exists({checkFalsy: true})
+        .notEmpty()
+        .isLength({max: 49})
+        .withMessage('Name must be less than 50 characters'),
+    check('description')
+        .exists({checkFalsy:true})
+        .notEmpty()
+        .withMessage('Description is required'),
+    check('price')
+        .exists({checkFalsy: true})
+        .isDecimal({checkFalsy: true})
+        .toFloat()
+        .notEmpty()
+        .withMessage('Price is required'),
+    handleValidationErrors
+]
+
+const validateReview = [
+    check('review')
+        .exists({checkFalsy: true})
+        .notEmpty()
+        .withMessage('Review must contain text'),
+    check('star')
+        .exists({checkFalsy:true})
+        .notEmpty()
+        .isInt({min: 1, max: 5})
+        .withMessage('Must be a number between 1 to 5'),
+    handleValidationErrors
+]
 
 // Get all spots
 router.get('/', async(req,res)=>{
     const spots = await Spot.findAll({
         attributes: {
-        include:
-        [[sequelize.literal(`(SELECT image FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`]],
+        include:[
+            [sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`],
+            [sequelize.literal(`(SELECT AVG(star) FROM Reviews WHERE spotId = Spot.id)`),"avgStarRating"]
+        ],
+
         }
     })
     res.json({spots})
 })
 // Get current users
-router.get('/current', async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
     const current = await Spot.findAll({
         where: { ownerId: req.user.id }
     })
@@ -123,6 +186,7 @@ router.get('/current', async (req, res) => {
 //     res.json(allSpots.Spot)
 // })
 
+// get spot by id
 router.get("/:id", async (req, res) => {
     const spot = await Spot.findOne({
         where: { id: req.params.id },
@@ -138,8 +202,7 @@ router.get("/:id", async (req, res) => {
 })
 
 //Create a spot
-router.post('/', async (req, res) => {
-    try {
+router.post('/', validSpot, requireAuth, async (req, res) => {
     const { address, city, state, country, lat, lng, name, description, price, ownerId } = req.body
 
     const newSpot = await Spot.create(
@@ -156,35 +219,23 @@ router.post('/', async (req, res) => {
             ownerId: req.user.id,
         })
         return res.status(201).json({message: 'Successfully created', data: newSpot})
-    }
-      catch {
-        const err = new Error('Validation Error')
-        err.status = 400
-        err.errors =[
-            "Street address is required",
-            "City is required",
-            "State is required",
-            "Country is required",
-            "Latitude is not valid",
-            "Longitude is not valid",
-            "Name must be less than 50 characters",
-            "Description is required",
-            "Price per day is required"
-        ]
-        throw err
-      }
 })
-
-// router.post('/:id/images', async (req, res) => {
-//     try {
-//         const {id, url, preview } = req.body
-//     }
-//     catch {
-
-//     }
-// })
-
-router.delete('/:id', async (req, res) => {
+//add image by id
+router.post('/:id/images', requireAuth, async (req, res) => {
+        const { url, preview } = req.body
+        let spot = await Spot.findByPk(req.params.id)
+        spot = await SpotImage.create(
+            {
+                url: url,
+                preview: preview
+     })
+     if(!spot){
+        res.status(404).json({message: 'Spot couldnt be found'})
+     }
+     res.json(spot)
+})
+// delete spot by id
+router.delete('/:id', requireAuth, async (req, res) => {
     const spot = await Spot.findByPk(req.params.id,{
         where: { ownerId: req.user.id }
     })
@@ -194,8 +245,8 @@ router.delete('/:id', async (req, res) => {
     await spot.destroy()
     res.json({ message: 'Successfully deleted'})
 })
-
-router.put('/:spotId', async (req,res)=> {
+// update/edit spot by id
+router.put('/:spotId', requireAuth, async (req,res)=> {
     const {address, city, state, country, lat, lng, name, description, price} = req.body
     let spot = await Spot.findByPk(req.params.spotId)
     spot.update({
@@ -216,7 +267,7 @@ router.put('/:spotId', async (req,res)=> {
     res.json(spot)
 })
 
-
+// get reviews by id
 router.get('/:id/reviews', async (req,res) => {
     const reviews = await Review.findByPk(req.params.id,{
         include: [
@@ -235,6 +286,21 @@ router.get('/:id/reviews', async (req,res) => {
         res.status(404).json({message: "Spot couldn't be found"})
     }
     res.json({reviews})
+})
+
+//post review by id
+router.post('/:id/reviews', async (req,res)=>{
+  const { review, star } = req.body
+  let spotReview = await Spot.findByPk(req.params.id)
+  spotReview = await Review.create(
+    {
+        review: review,
+        star: star
+    })
+    if(!spotReview){
+        res.status(404).json({message: 'Spot couldnt be found'})
+    }
+    res.json(spotReview)
 })
 
 module.exports = router;

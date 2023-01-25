@@ -13,7 +13,7 @@ const review = require('../../db/models/review');
 const spotimage = require('../../db/models/spotimage');
 const router = express.Router();
 
-router.get('/current', async (req, res)=> {
+router.get('/current', requireAuth, async (req, res)=> {
     const reviews = await Review.findAll({
          where: { userId: req.user.id},
          include: [
