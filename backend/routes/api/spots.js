@@ -231,7 +231,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
                 preview: preview
      })
      if(!spot){
-        res.status(404).json({message: 'Spot couldnt be found'})
+        res.status(404).json({message: 'Spot couldnt be found',statusCode:404})
      }
      res.json(spot)
 })
@@ -241,7 +241,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
         where: { ownerId: req.user.id }
     })
     if(!spot){
-      return res.status(404).json({ message: 'Spot couldnt be found'})
+      return res.status(404).json({ message: 'Spot couldnt be found',statusCode:404})
     }
     await spot.destroy()
     res.json({ message: 'Successfully deleted'})
@@ -262,7 +262,7 @@ router.put('/:spotId', requireAuth, async (req,res)=> {
         price: price,
     })
     if(!spot){
-        res.status(404).json({message: "Spot not found"})
+        res.status(404).json({message: "Spot not found", statusCode:404})
     }
     await spot.save()
     res.json(spot)
@@ -284,7 +284,7 @@ router.get('/:id/reviews', async (req,res) => {
         ]
     })
     if(!reviews){
-        res.status(404).json({message: "Spot couldn't be found"})
+        res.status(404).json({message: "Spot couldn't be found", statusCode:404})
     }
     res.json({reviews})
 })
@@ -301,7 +301,9 @@ router.post('/:id/reviews', validateReview, requireAuth, async (req,res)=>{
         star: star
     })
     if(!spotReview){
-        res.status(404).json({message: 'Spot couldnt be found'})
+        res.status(404).json({message: 'Spot couldnt be found', statusCode:404})
+    } else if (spotReview){
+        res.status(403).json({message: 'User already has a review for this spot', statusCode:403})
     }
     res.json(spotReview)
 })
