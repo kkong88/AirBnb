@@ -14,7 +14,16 @@ const spotimage = require('../../db/models/spotimage');
 const router = express.Router();
 
 const validateImage = [
-    check()
+    check('review')
+    .exists({checkFalsy: true})
+    .notEmpty()
+    .withMessage('Review must contain text'),
+check('star')
+    .exists({checkFalsy:true})
+    .notEmpty()
+    .isInt({min: 1, max: 5})
+    .withMessage('Must be a number between 1 to 5'),
+handleValidationErrors
 ]
 
 router.get('/current', requireAuth, async (req, res)=> {
@@ -83,6 +92,19 @@ router.post('/:id/images', requireAuth, async (req, res) => {
         }
         res.json(obj)
     }
+})
+
+router.put('/:id', validateImage, requireAuth, async (req, res) =>{
+    const { review, star } = req.body
+    let updateReview = await Review.findByPk(req.params.id)
+    updateReview.update({
+        review: review,
+        star: star
+    })
+    if(!updateReview){
+        res.status(404).json({message: 'Review couldnt be found'})
+    }
+    res.json(updateReview)
 })
 
 module.exports = router;
