@@ -12,6 +12,7 @@ const sequelize = require('sequelize');
 const review = require('../../db/models/review');
 const spotimage = require('../../db/models/spotimage');
 const { JsonWebTokenError } = require('jsonwebtoken');
+const user = require('../../db/models/user');
 const router = express.Router();
 
 const validSpot = [
@@ -289,11 +290,13 @@ router.get('/:id/reviews', async (req,res) => {
 })
 
 //post review by id
-router.post('/:id/reviews', async (req,res)=>{
+router.post('/:id/reviews', validateReview, requireAuth, async (req,res)=>{
   const { review, star } = req.body
   let spotReview = await Spot.findByPk(req.params.id)
   spotReview = await Review.create(
     {
+        userId: req.user.id,
+        spotId: Number(req.params.id),
         review: review,
         star: star
     })
