@@ -94,6 +94,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     }
 })
 
+//edit a review
 router.put('/:id', validateImage, requireAuth, async (req, res) =>{
     const { review, star } = req.body
     let updateReview = await Review.findByPk(req.params.id)
@@ -104,7 +105,19 @@ router.put('/:id', validateImage, requireAuth, async (req, res) =>{
     if(!updateReview){
         res.status(404).json({message: 'Review couldnt be found'})
     }
+    await updateReview.save()
     res.json(updateReview)
+})
+
+// delete a review
+router.delete('/:id', requireAuth, async (req, res) => {
+    const reviews = await Review.findByPk(req.params.id)
+    if(!reviews){
+        res.status(404).json({message: 'Review couldnt be found'})
+    } else {
+        await reviews.destroy()
+        res.status(200).json({message: 'Successfully deleted'})
+    }
 })
 
 module.exports = router;
