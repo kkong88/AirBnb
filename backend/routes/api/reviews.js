@@ -18,7 +18,7 @@ const validateImage = [
     .exists({checkFalsy: true})
     .notEmpty()
     .withMessage('Review must contain text'),
-check('star')
+check('stars')
     .exists({checkFalsy:true})
     .notEmpty()
     .isInt({min: 1, max: 5})
@@ -72,15 +72,16 @@ router.get('/current', requireAuth, async (req, res)=> {
 router.post('/:id/images', requireAuth, async (req, res) => {
     const { url } = req.body
     const review = await Review.findByPk(req.params.id)
+    if(!review){
+      return res.status(404).json({message: 'Review couldnt be found'})
+    }
     const imageReview = await reviewImage.findAll({
         where: {
             reviewId: review.id
         }
     })
-    if(!review){
-        res.status(404).json({message: 'Review couldnt be found'})
-    } else if (imageReview.length >= 10){
-        res.status(403).json({message: 'Maximum number of image for this resource was reached'})
+     if (imageReview.length >= 10){
+       return res.status(403).json({message: 'Maximum number of image for this resource was reached'})
     } else {
         const image = await reviewImage.create({
             reviewId : review.id,
@@ -95,28 +96,28 @@ router.post('/:id/images', requireAuth, async (req, res) => {
 })
 
 //edit a review
-router.put('/:id', validateImage, requireAuth, async (req, res) =>{
-    const { review, star } = req.body
+router.put('/:id', validateImage ,requireAuth, async (req, res) =>{
+    const { review, stars } = req.body
     let updateReview = await Review.findByPk(req.params.id)
-    updateReview.update({
-        review: review,
-        star: star
-    })
     if(!updateReview){
-        res.status(404).json({message: 'Review couldnt be found'})
+       return res.status(404).json({message: 'Review couldnt be found'})
     }
+     updateReview.update({
+        review: review,
+        star: stars
+    })
     await updateReview.save()
-    res.json(updateReview)
+   res.json(updateReview)
 })
 
 // delete a review
 router.delete('/:id', requireAuth, async (req, res) => {
     const reviews = await Review.findByPk(req.params.id)
     if(!reviews){
-        res.status(404).json({message: 'Review couldnt be found'})
+        res.status(404).json({message: 'Review couldnt be found', statusCode: 404})
     } else {
         await reviews.destroy()
-        res.status(200).json({message: 'Successfully deleted'})
+        res.status(200).json({message: 'Successfully deleted', statusCode: 200})
     }
 })
 
