@@ -100,7 +100,7 @@ router.put('/:id', validateImage ,requireAuth, async (req, res) =>{
     const { review, stars } = req.body
     let updateReview = await Review.findByPk(req.params.id)
     if(!updateReview){
-       return res.status(404).json({message: 'Review couldnt be found'})
+       return res.status(404).json({message: 'Review couldnt be found', statusCode:404})
     }
      updateReview.update({
         review: review,
