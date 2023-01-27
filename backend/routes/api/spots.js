@@ -423,7 +423,7 @@ router.post('/:id/bookings', requireAuth, async (req,res) =>{
   }
   spot.Bookings.forEach(booking => {
     let currentDate = booking.startDate.toISOString().slice(0,10)
-    if(booking.startDate.toISOString().slice(0,10) === startDate){
+    if(currentDate === startDate){
     return res.status(403).json({message: "Sorry, this spot is already booked for the specified dates",statusCode:403, errors: ["Start date conflicts with an existing booking",
       "End date conflicts with an existing booking"]})
     }

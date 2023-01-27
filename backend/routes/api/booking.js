@@ -31,6 +31,28 @@ router.get('/current', requireAuth, async(req, res)=>{
    return res.json({Bookings:bookings})
 })
 
+router.put('/:id', requireAuth, async(req, res)=>{
+    const { startDate, endDate } = req.body
+    let booking = await Booking.findByPk(req.params.id)
+    if(!booking){
+       return res.status(404).json({message: "Booking couldn't be found", statusCode: 404})
+    }
+    booking.update({
+        startDate: startDate,
+        endDate: endDate,
+    })
+    let resObj = {
+        id: booking.id,
+        userId: booking.userId,
+        spotId: booking.spotId,
+        startDate: booking.startDate.toISOString().slice(0,10),
+        endDate: booking.endDate.toISOString().slice(0,10),
+        createdAt: booking.createdAt,
+        updatedAt: booking.updatedAt
+    }
+    await booking.save()
+    res.json(resObj)
+})
 
 
 module.exports = router;
