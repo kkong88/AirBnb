@@ -35,6 +35,9 @@ router.get('/current', requireAuth, async(req, res)=>{
 router.put('/:id', requireAuth, async(req, res)=>{
     const { startDate, endDate } = req.body
     let booking = await Booking.findByPk(req.params.id)
+    if(!booking){
+       return res.status(404).json({message: "Booking couldn't be found", statusCode: 404})
+    }
     if(startDate > endDate){
         return res.status(400).json({message: "Validation error", statusCode:400, errors: ["endDate cannot be on or before startDate"]})
     }
@@ -49,9 +52,6 @@ router.put('/:id', requireAuth, async(req, res)=>{
       "End date conflicts with an existing booking"]})
     }
 
-    if(!booking){
-       return res.status(404).json({message: "Booking couldn't be found", statusCode: 404})
-    }
     booking.update({
         startDate: startDate,
         endDate: endDate,
@@ -68,6 +68,7 @@ router.put('/:id', requireAuth, async(req, res)=>{
     await booking.save()
     res.json(resObj)
 })
+
 // delete booking based on booking id
 router.delete('/:id', requireAuth, async (req,res)=>{
     const booking = await Booking.findByPk(req.params.id,{

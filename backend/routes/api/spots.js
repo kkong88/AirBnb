@@ -290,6 +290,7 @@ router.post("/:id/images", requireAuth, async (req, res) => {
     preview: preview,
   });
   const resObj = {
+    id: spot.id,
     url: spot.url,
     preview: spot.preview,
   };
@@ -419,6 +420,11 @@ router.post('/:id/bookings', requireAuth, async (req,res) =>{
   const spot = await Spot.findByPk(req.params.id,{
     include: { model: Booking }
   })
+  if(!spot){
+    return res
+    .status(404)
+    .json({message: "Spot couldn't be found", statusCode: 404})
+  }
   const { startDate, endDate } = req.body
   if(startDate > endDate){
    return res.status(400).json({message: "Validation error", statusCode:400, errors: ["endDate cannot be on or before startDate"]})
@@ -430,11 +436,6 @@ router.post('/:id/bookings', requireAuth, async (req,res) =>{
       "End date conflicts with an existing booking"]})
     }
   })
-  if(!spot){
-    return res
-    .status(404)
-    .json({message: "Spot couldn't be found", statusCode: 404})
-  }
   if(spot.userId !== req.userId){
     return res.status(403),json({message: 'Forbidden'})
   }
