@@ -295,6 +295,7 @@ router.post("/:id/images", requireAuth, async (req, res) => {
   };
   res.json(resObj);
 });
+
 // delete spot by id
 router.delete("/:id", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.id, {
@@ -308,6 +309,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
   await spot.destroy();
   res.json({ message: "Successfully deleted" });
 });
+
 // update/edit spot by id
 router.put("/:spotId", requireAuth, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
