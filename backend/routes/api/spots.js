@@ -139,16 +139,42 @@ router.get('/', queryValidate, async (req, res)=> {
 
   const spots = await Spot.findAll({
     where,
-    attributes: {
-      include:
-        [[sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),
-          `previewImage`,]],
-      exclude: [['avgStarRating']]
-        },
+    // attributes: {
+    //   // include:
+    //   //   [[sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),
+    //   //     `previewImage`,]],
+    //   // exclude: [['avgStarRating']]
+    //     },
         limit: size,
         offset: size * (page - 1)
   })
-
+  for await (let spot of spots){
+    const image = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true
+      }
+    })
+    if(image){
+      spot.dataValues.previewImage = image.url
+    } else {
+      spot.dataValues.previewImage = 'No preview image'
+    }
+    const reviews = await Review.findAll({
+      where: {spotId: spot.id}
+    })
+    //console.log(reviews)
+    let sum = 0
+    if(reviews.length){
+    reviews.forEach(review =>{
+      //console.log(review)
+      sum += Number(review.dataValues.star)
+    })
+    spot.dataValues.avgStarRating = sum/reviews.length
+  } else {
+    spot.dataValues.avgStarRating = 0
+  }
+  }
 
 res.json({Spot: spots, page, size})
 })
@@ -181,6 +207,33 @@ router.get("/current", requireAuth, async (req, res) => {
   const Spots = await Spot.findAll({
     where: { ownerId: req.user.id },
   });
+  for await (let spot of Spots){
+    const image = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true
+      }
+    })
+    if(image){
+      spot.dataValues.previewImage = image.url
+    } else {
+      spot.dataValues.previewImage = 'No preview image'
+    }
+    const reviews = await Review.findAll({
+      where: {spotId: spot.id}
+    })
+    //console.log(reviews)
+    let sum = 0
+    if(reviews.length){
+    reviews.forEach(review =>{
+      //console.log(review)
+      sum += Number(review.dataValues.star)
+    })
+    spot.dataValues.avgStarRating = sum/reviews.length
+  } else {
+    spot.dataValues.avgStarRating = 0
+  }
+  }
   res.json({ Spots });
 });
 
@@ -279,23 +332,25 @@ router.get("/current", requireAuth, async (req, res) => {
 router.get("/:id", async (req, res) => {
   const spot = await Spot.findOne({
     where: { id: req.params.id },
-    attributes: {
-      include: [
-        [
-          sequelize.literal(
-            `(SELECT COUNT(id) FROM Reviews WHERE spotId = Spot.id)`
-          ),
-          "numReviews",
-        ],
-        [
-          sequelize.literal(
-            `(SELECT AVG(star) FROM Reviews WHERE spotId = Spot.id)`
-          ),
-          "avgStarRating",
-        ],
-      ],
-    },
-    include: [{ model: User, as: "Owner" }],
+    // attributes: {
+    //   include: [
+    //     [
+    //       sequelize.literal(
+    //         `(SELECT COUNT(id) FROM Reviews WHERE spotId = Spot.id)`
+    //       ),
+    //       "numReviews",
+    //     ],
+    //     [
+    //       sequelize.literal(
+    //         `(SELECT AVG(star) FROM Reviews WHERE spotId = Spot.id)`
+    //       ),
+    //       "avgStarRating",
+    //     ],
+    //   ],
+    // },
+    include: [{ model: User, as: "Owner",
+  attributes: {exclude: ['username','email','hashedPassword','createdAt','updatedAt']} }, {model: SpotImage,
+      attributes: {exclude: ['spotId','createdAt','updatedAt']}}],
   });
   if (!spot) {
     return res.status(404).json({
@@ -303,10 +358,30 @@ router.get("/:id", async (req, res) => {
       statusCode: 404,
     });
   }
-  const spotImages = await SpotImage.findAll({
-    where: { spotId: req.params.id },
-  });
-  spot.dataValues.SpotImages = spotImages;
+  const reviews = await Review.findAll({
+    where: { spotId: spot.id}
+  })
+  spot.dataValues.numReviews = reviews.length
+  // for await (let spot of spots){
+  //   const spotImages = await SpotImage.findAll({
+  //     where: { spotId: req.params.id },
+  //   });
+  //   spot.dataValues.SpotImages = spotImages;
+  //   const reviews = await Review.findAll({
+  //     where: {spotId: spot.id}
+  //   })
+  //   //console.log(reviews)
+    let sum = 0
+    if(reviews.length){
+      reviews.forEach(review =>{
+        //console.log(review)
+      sum += Number(review.dataValues.star)
+    })
+    spot.dataValues.avgStarRating = sum/reviews.length
+  } else {
+    spot.dataValues.avgStarRating = 0
+  }
+  // }
   res.json(spot);
 });
 

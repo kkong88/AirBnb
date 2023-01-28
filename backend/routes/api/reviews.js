@@ -36,13 +36,11 @@ router.get('/current', requireAuth, async (req, res)=> {
           attributes:['id', 'firstName', 'lastName']
          },
          {
-         model: Spot,
+        model: Spot,
          attributes: {
-            include:
-            [[sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`]],
-            exclude: ['createdAt', 'updatedAt']
-        }
-         },
+          exclude: ['createdAt', 'updatedAt']
+         }
+        },
          {
          model: reviewImage,
          attributes: {
@@ -51,6 +49,21 @@ router.get('/current', requireAuth, async (req, res)=> {
          }
         ],
     })
+    for await (let review of reviews){
+        const image = await SpotImage.findOne({
+          where: {
+            spotId: review.Spot.id,
+            preview: true
+          }
+        })
+        if(image){
+          review.Spot.dataValues.previewImage = image.url
+        } else {
+          review.Spot.dataValues.previewImage = 'No preview image'
+        }
+    }
+
+
     res.json({reviews})
 })
 

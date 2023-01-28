@@ -22,41 +22,54 @@ router.get('/current', requireAuth, async(req, res)=>{
             {
                 model: Spot,
                 attributes: {
-                    include:
-                    [[sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),`previewImage`]],
                     exclude: ['createdAt', 'updatedAt']
                 }
             }
         ]
     })
-    let resObj = []
 
-    bookings.forEach(booking => {
-        resObj.push({
-            id: booking.id,
-            userId: booking.userId,
-            spotId: booking.spotId,
-            startDate: booking.startDate.toISOString().slice(0,10),
-            endDate: booking.endDate.toISOString().slice(0,10),
-            createdAt: booking.createdAt,
-            updatedAt: booking.updatedAt,
-             Spot: {
-                id: booking.Spot.id,
-                ownerId: booking.Spot.ownerId,
-                address: booking.Spot.address,
-                city: booking.Spot.city,
-                state: booking.Spot.state,
-                country: booking.Spot.country,
-                lat: booking.Spot.lat,
-                lng: booking.Spot.lng,
-                name: booking.Spot.name,
-                price: booking.Spot.price,
-                previewImage: booking.Spot.dataValues.previewImage
-             }
+    for await (let booking of bookings){
+        const image = await SpotImage.findOne({
+          where: {
+            spotId: booking.Spot.id,
+            preview: true
+          }
         })
-    })
+        if(image){
+          booking.Spot.dataValues.previewImage = image.url
+        } else {
+          booking.Spot.dataValues.previewImage = 'No preview image'
+        }
+    }
 
-   return res.json({Bookings:resObj})
+    // let resObj = []
+
+    // bookings.forEach(booking => {
+    //     resObj.push({
+    //         id: booking.id,
+    //         userId: booking.userId,
+    //         spotId: booking.spotId,
+    //         startDate: booking.startDate.toISOString().slice(0,10),
+    //         endDate: booking.endDate.toISOString().slice(0,10),
+    //         createdAt: booking.createdAt,
+    //         updatedAt: booking.updatedAt,
+    //          Spot: {
+    //             id: booking.Spot.id,
+    //             ownerId: booking.Spot.ownerId,
+    //             address: booking.Spot.address,
+    //             city: booking.Spot.city,
+    //             state: booking.Spot.state,
+    //             country: booking.Spot.country,
+    //             lat: booking.Spot.lat,
+    //             lng: booking.Spot.lng,
+    //             name: booking.Spot.name,
+    //             price: booking.Spot.price,
+    //             previewImage: booking.Spot.dataValues.previewImage
+    //          }
+    //     })
+    // })
+
+   return res.json({Bookings:bookings})
 })
 
 // edit a booking based on booking id
