@@ -12,6 +12,7 @@ const spot = require('../../db/models/spot');
 const sequelize = require('sequelize');
 const review = require('../../db/models/review');
 const spotimage = require('../../db/models/spotimage');
+const booking = require('../../db/models/booking');
 const router = express.Router();
 
 router.get('/current', requireAuth, async(req, res)=>{
@@ -28,7 +29,34 @@ router.get('/current', requireAuth, async(req, res)=>{
             }
         ]
     })
-   return res.json({Bookings:bookings})
+    let resObj = []
+
+    bookings.forEach(booking => {
+        resObj.push({
+            id: booking.id,
+            userId: booking.userId,
+            spotId: booking.spotId,
+            startDate: booking.startDate.toISOString().slice(0,10),
+            endDate: booking.endDate.toISOString().slice(0,10),
+            createdAt: booking.createdAt,
+            updatedAt: booking.updatedAt,
+             Spot: {
+                id: booking.Spot.id,
+                ownerId: booking.Spot.ownerId,
+                address: booking.Spot.address,
+                city: booking.Spot.city,
+                state: booking.Spot.state,
+                country: booking.Spot.country,
+                lat: booking.Spot.lat,
+                lng: booking.Spot.lng,
+                name: booking.Spot.name,
+                price: booking.Spot.price,
+                previewImage: booking.Spot.dataValues.previewImage
+             }
+        })
+    })
+
+   return res.json({Bookings:resObj})
 })
 
 // edit a booking based on booking id

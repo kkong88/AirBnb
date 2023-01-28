@@ -78,6 +78,38 @@ const validateReview = [
   handleValidationErrors,
 ];
 
+const queryValidate = [
+  check('page')
+    .if(check('page').exists())
+    .isInt({min: 1})
+    .withMessage('Page must be greater than or equal to 1'),
+  check('size')
+    .if(check('size').exists())
+    .isInt({min: 1})
+    .withMessage('Size must be greater than or equal to 1'),
+  check('maxLat')
+   .if(check('maxLat').exists())
+   .isFloat({min: -90, max: 90})
+   .withMessage('Maximum latitude is invalid'),
+  check('minLat')
+   .if(check('minLat').exists())
+   .isFloat({min: -90, max: 90})
+   .withMessage('Minimum latiude is invalid'),
+  check('maxLng')
+   .if(check('maxLat').exists())
+   .isFloat({min:-180, max:180})
+   .withMessage('Maximum longitude is invalid'),
+  check('minLng')
+   .if(check('minLng').exists())
+   .isFloat({min:-180, max:180})
+   .withMessage('Mininum longitude is invalid'),
+  check('maxPrice')
+   .if(check('maxPrice').exists())
+   .isFloat({min:0})
+   .withMessage('Minimum price must be greater than or equal to 0'),
+handleValidationErrors
+]
+
 // const bookingValidate = [
 //   check('startDate')
 //    .exists({checkFalsy: true})
@@ -90,28 +122,60 @@ const validateReview = [
 //   handleValidationErrors
 // ]
 
-// Get all spots
-router.get("/", async (req, res) => {
+//Get all spots with query parameter
+router.get('/', queryValidate, async (req, res)=> {
+  let { page, size, maxLat, minLat, maxLng,minLng, minPrice, maxPrice } = req.query
+  let where = {}
+  page = parseInt(page)
+  size = parseInt(size)
+  if(Number.isNaN(page) || page < 0) page = 1
+  if(Number.isNaN(size) || size > 20) size = 20
+  if(maxLng) where.lng = {[Op.lte]: maxLng}
+  if(minLng) where.lng = {[Op.gte]: minLng}
+  if(maxLat) where.lat = {[Op.gte]: maxLat}
+  if(minLat) where.lat = {[Op.Lte]: minLat}
+  if(minPrice) where.price = {[Op.gte]: minPrice}
+  if(maxPrice) where.price = {[Op.lte]: maxPrice}
+
   const spots = await Spot.findAll({
+    where,
     attributes: {
-      include: [
-        [
-          sequelize.literal(
-            `(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`
-          ),
-          `previewImage`,
-        ],
-        [
-          sequelize.literal(
-            `(SELECT AVG(star) FROM Reviews WHERE spotId = Spot.id)`
-          ),
-          "avgStarRating",
-        ],
-      ],
-    },
-  });
-  res.json({ spots });
-});
+      include:
+        [[sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),
+          `previewImage`,]],
+      exclude: [['avgStarRating']]
+        },
+        limit: size,
+        offset: size * (page - 1)
+  })
+
+
+res.json({Spot: spots, page, size})
+})
+
+// Get all spots
+// router.get("/", async (req, res) => {
+//   const spots = await Spot.findAll({
+//     attributes: {
+//       include: [
+//         [
+//           sequelize.literal(
+//             `(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`
+//           ),
+//           `previewImage`,
+//         ],
+//         [
+//           sequelize.literal(
+//             `(SELECT AVG(star) FROM Reviews WHERE spotId = Spot.id)`
+//           ),
+//           "avgStarRating",
+//         ],
+//       ],
+//     },
+//   });
+//   res.json({ spots });
+// });
+
 // Get current users
 router.get("/current", requireAuth, async (req, res) => {
   const Spots = await Spot.findAll({
@@ -403,7 +467,15 @@ router.get('/:id/bookings', requireAuth, async (req,res)=>  {
   const checkBooking = []
   booking.forEach(ele => {
     if(ele.userId === req.user.id){
-      checkBooking.push(ele)
+      checkBooking.push({
+        id: ele.id,
+        spotId: ele.spotId,
+        userId: ele.userId,
+        startDate: ele.startDate.toISOString().slice(0,10),
+        endDate: ele.endDate.toISOString().slice(0,10),
+        createdAt: ele.createdAt,
+        updatedAt: ele.updatedAt
+      })
     } else {
       checkBooking.push({
         spotId: ele.spotId,
@@ -437,7 +509,7 @@ router.post('/:id/bookings', requireAuth, async (req,res) =>{
     }
   })
   if(spot.userId !== req.userId){
-    return res.status(403),json({message: 'Forbidden'})
+    return res.status(403).json({message: 'Forbidden'})
   }
   const newBooking = await Booking.create({
     userId: req.user.id,
@@ -452,9 +524,39 @@ router.post('/:id/bookings', requireAuth, async (req,res) =>{
     startDate: newBooking.startDate.toISOString().slice(0,10),
     endDate: newBooking.endDate.toISOString().slice(0,10)
   }
+  console.log(resObj)
   res.json(resObj)
 })
 
 
+// router.get('/', queryValidate, async (req, res)=> {
+//   let { page, size, maxLat, minLat, maxLng, minPrice, maxPrice } = req.query
+//   let where = {}
+//   page = parseInt(page)
+//   size = parseInt(size)
+//   if(Number.isNaN(page) || page < 0) page = 1
+//   if(Number.isNaN(size) || size > 20) size = 20
+//   if(maxLng) where.lng = {[Op.lte]: maxLng}
+//   if(minLng) where.lng = {[Op.gte]: minLng}
+//   if(maxLat) where.lat = {[Op.gte]: maxLat}
+//   if(minLat) where.lat = {[Op.Lte]: minLat}
+//   if(minPrice) where.price = {[Op.gte]: minPrice}
+//   if(maxPrice) where.price = {[Op.lte]: maxPrice}
+
+//   const spots = await Spot.findAll({
+//     where,
+//     attributes: {
+//       include:
+//         [sequelize.literal(`(SELECT url FROM spotImages WHERE spotId = Spot.id AND preview = true)`),
+//           `previewImage`,],
+//       exclude: [['avgStarRating']]
+//         },
+//         limit: size,
+//         offset: size * (page - 1)
+//   })
+
+
+// res.json({Spot: spots, page, size})
+// })
 
 module.exports = router;
