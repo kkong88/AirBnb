@@ -7,32 +7,30 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Reviews', {
+    await queryInterface.createTable('Bookings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull:false,
-        references: {model: 'Users'},
-        onDelete: 'CASCADE'
-      },
       spotId: {
         type: Sequelize.INTEGER,
-        allowNull:false,
+        allowNull: false,
         references: {model: 'Spots'},
         onDelete: 'CASCADE'
       },
-      review: {
-        type: Sequelize.STRING,
-        allowNull:false,
-      },
-      star: {
+      userId: {
         type: Sequelize.INTEGER,
-        allowNull:false,
+        allowNull: false,
+        references: {model: 'Users'},
+        onDelete: 'CASCADE'
+      },
+      startDate: {
+        type: Sequelize.DATE
+      },
+      endDate: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -44,16 +42,10 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-<<<<<<< HEAD
-    },
-    options
-    );
-=======
     },options);
->>>>>>> dev
   },
   down: async(queryInterface, Sequelize) => {
-    options.tableName = "Reviews"
+    options.tableName = 'Bookings'
     await queryInterface.dropTable(options);
   }
 };
