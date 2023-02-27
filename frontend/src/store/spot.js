@@ -1,5 +1,6 @@
 const ALL_SPOTS = 'spots/ALL_SPOTS'
 
+
 export const allSpot = (spots) => {
     return {
         type: ALL_SPOTS,
