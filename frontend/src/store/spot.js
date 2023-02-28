@@ -12,7 +12,7 @@ export const getSpot = () => async dispatch => {
     const response = await fetch('/api/spots')
     const data = await response.json()
     dispatch(allSpot(data))
-    return response
+    //return response
 }
 
 const initialState = {}
