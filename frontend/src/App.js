@@ -17,7 +17,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route exact path='/' componet ={LandingPage}></Route>
+          <Route path='/' component={LandingPage}></Route>
         </Switch>
       )}
     </>
