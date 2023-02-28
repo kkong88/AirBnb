@@ -8,6 +8,12 @@ export const allSpot = (spots) => {
     }
 }
 
+export const getSpot = () => async dispatch => {
+    const response = await fetch('/api/spots')
+    const data = await response.json()
+    dispatch(allSpot(data))
+    return response
+}
 
 const initialState = {}
 

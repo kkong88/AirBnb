@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-https://dbdiagram.io/d/63b8a2197d39e42284e96e0f
+![](https://res.cloudinary.com/dip4w3xmy/image/upload/v1677360686/Untitled_2_izwxgc.png)
 
 ## API Documentation
 
