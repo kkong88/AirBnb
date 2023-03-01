@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
+import DetailSpot from "./components/DetailSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,7 +18,8 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route path='/' component={LandingPage}></Route>
+          <Route exact path='/' component={LandingPage}></Route>
+          <Route exact path='/spot/:id'> <DetailSpot /> </Route>
         </Switch>
       )}
     </>
