@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { createSpot } from '../../store/spot'
+import { createSpot, getDetail } from '../../store/spot'
 
 
 
@@ -17,9 +17,13 @@ function CreateSpot() {
     const [price, setPrice] = useState(1)
     const history = useHistory()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        return dispatch(createSpot({name, state, country, city, address, description, price}))
+        const payload = {name, state, country, city, address, description, price,}
+       const spot = await dispatch(createSpot(payload))
+       await dispatch(getDetail(spot.id))
+       console.log(spot)
+        history.push(`/spots/${spot.id}`)
     }
 
     return (
@@ -84,7 +88,7 @@ function CreateSpot() {
         <li>
         <label>price
             <input
-            type='text'
+            type='number'
             value={price}
             onChange={(e) =>setPrice(e.target.value)}
             />

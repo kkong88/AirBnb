@@ -36,19 +36,23 @@ export const createSpot = (spots) => async (dispatch) => {
             city,
             address,
             description,
-            price
+            price,
+            lat:11.11,
+            lng:12.12
         }),
     })
     const data = await response.json()
     dispatch(makeSpot(data.spots))
-    return response
+    return data
 }
 
 export const getDetail = (id) => async dispatch => {
     const response = await fetch(`/api/spots/${id}`)
+    if(response.ok){
     const data = await response.json()
     dispatch(detailSpot(data))
     return response
+    }
 }
 
 export const getSpot = () => async dispatch => {
