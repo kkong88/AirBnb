@@ -26,8 +26,9 @@ export const detailSpot = (spots) => {
 }
 
 export const createSpot = (spots) => async (dispatch) => {
-    const { name, state, country, city, address, description, price } = spots
-    const response = await csrfFetch('/api/spots', {
+    const { name, state, country, city, address, description, price, images } = spots
+
+    let response = await csrfFetch('/api/spots', {
         method: "POST",
         body: JSON.stringify({
             name,
@@ -38,12 +39,28 @@ export const createSpot = (spots) => async (dispatch) => {
             description,
             price,
             lat:11.11,
-            lng:12.12
+            lng:12.12,
         }),
     })
+    console.log(response)
+    if(response.ok){
     const data = await response.json()
-    dispatch(makeSpot(data.spots))
+    dispatch(makeSpot(data))
+    for await(let image of images){
+        let imageRes = await csrfFetch(`/api/spots/${data.id}/images`,{
+            method: "POST",
+            body: JSON.stringify({
+               url: image,
+               preview: true
+            })
+        })
+        if(imageRes.ok){
+            imageRes = await imageRes.json()
+            console.log(imageRes)
+        }
+    }
     return data
+    }
 }
 
 export const getDetail = (id) => async dispatch => {

@@ -15,15 +15,48 @@ function CreateSpot() {
     const [address, setAddress] = useState('')
     const [description, setDesciption] = useState('')
     const [price, setPrice] = useState(1)
+    const [previewImage, setPreviewImage] = useState('')
+    const [image1, setImage1] = useState('')
+    const [image2, setImage2] = useState('')
+    const [image3, setImage3] = useState('')
+    const [image4, setImage4] = useState('')
     const history = useHistory()
+
+    const handleImages = (e) => {
+        const {name, value} = e.target;
+        switch(name){
+            case 'previewImage':
+                setPreviewImage(value)
+                break;
+            case 'image1':
+                setImage1(value)
+                break
+            case 'image2':
+                 setImage2(value)
+                 break
+            case 'image3':
+                setImage3(value)
+                break
+            case 'image4':
+                setImage4(value)
+                break
+            default:
+                return
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const payload = {name, state, country, city, address, description, price,}
-       const spot = await dispatch(createSpot(payload))
-       await dispatch(getDetail(spot.id))
-       console.log(spot)
-        history.push(`/spots/${spot.id}`)
+        const payload = { name, state, country, city, address, description, price, images:[previewImage,image1,image2,image3,image4] }
+        const newSpot = await dispatch(createSpot(payload))
+         if(newSpot){
+            const spotId = newSpot.id
+            payload.images.forEach( async(imageUrl, index) => {
+                if(imageUrl.trim() !== "") await dispatch(createSpot(spotId,imageUrl,index))
+            })
+            await dispatch(getDetail(spotId))
+           history.push(`/spot/${spotId}`)
+         }
     }
 
     return (
@@ -91,6 +124,15 @@ function CreateSpot() {
             type='number'
             value={price}
             onChange={(e) =>setPrice(e.target.value)}
+            />
+        </label>
+        </li>
+        <li>
+        <label>image
+            <input
+            type='text'
+            name='previewImage'
+            onChange={handleImages}
             />
         </label>
         </li>

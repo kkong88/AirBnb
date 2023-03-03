@@ -11,12 +11,11 @@ function DetailSpot(){
     useEffect(() => {
         dispatch(getDetail(id))
     },[dispatch, id])
-    //console.log(spots)
+
     const detail = spots?.spotDetail
-    //console.log(detail)
+
     if(detail === undefined) return <div>loading</div>
     const images = spots?.spotDetail.SpotImages
-    //console.log(images,"!!!!!!!!")
 
     return (
         <div>{images?.map(image => (
