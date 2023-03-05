@@ -2,6 +2,7 @@ import {useEffect} from 'react'
 import { useSelector, useDispatch} from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { getSpot } from '../../store/spot'
+import "./LandingPage.css"
 
 
 
@@ -16,7 +17,7 @@ function LandingPage(){
     const previewImage = spots?.Spot
 
     return (
-    <div>
+    <div className='body'>
         {previewImage?.map(spot => (
              <div key={spot.id}>
                 <NavLink to={`/spot/${spot.id}`}>

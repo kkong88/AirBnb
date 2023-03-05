@@ -1,0 +1,8 @@
+.airbnb_icon {
+    object-fit: contain;
+    height: 60px;
+    width: 60px;
+    margin-left: 50px;
+    margin-top: 20px;
+    cursor: progress;
+}

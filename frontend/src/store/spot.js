@@ -95,7 +95,6 @@ export const updateSpot = (spotId, spots) => async (dispatch) => {
         method: "PUT",
         body: JSON.stringify(spots)
     })
-    console.log(response)
     if(response.ok){
         const spot = await response.json()
         dispatch(updateASpot(spot))
