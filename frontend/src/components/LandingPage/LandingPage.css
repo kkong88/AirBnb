@@ -1,6 +1,23 @@
 .body {
     display: grid;
-    height: 20px;
+    height: 10px;
+    grid-gap: 20px;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
+}
+
+.img {
+    float: left;
+    width:  200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.state {
+    display: block;
+    margin-top: 200px;
+}
+
+.review {
+    display: flex;
 }

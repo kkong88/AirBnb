@@ -21,11 +21,12 @@ function LandingPage(){
         {previewImage?.map(spot => (
              <div key={spot.id}>
                 <NavLink to={`/spot/${spot.id}`}>
-                 <img src={spot.imageUrl} alt={spot.name} />
-                 <p> {spot.state}</p>
-                 <p> {spot.city} </p>
-                 <p> {spot.price} </p>
-                 <p> {spot.avgStarRating} </p>
+                 <img className="img" src={spot.previewImage} alt={spot.name} />
+                 <span className='state'> {spot.city}, {spot.state}</span>
+                 <span> ${spot.price} </span>
+                 <span className='review'> {spot.avgStarRating}
+                  <i className='fa-solid fa-star'/>
+                 </span>
                  </NavLink>
             </div>
         ))}
