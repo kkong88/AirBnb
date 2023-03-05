@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { getDetail, updateSpot } from '../../store/spot'
+import { deleteSpot, getDetail, updateSpot } from '../../store/spot'
 import { useModal } from '../../context/Modal'
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import UpdateSpot from '../UpdateSpot'
@@ -14,6 +14,12 @@ function DetailSpot(){
     const { closeModal } = useModal()
     const [showMenu, setShowMenu] = useState(false)
     const ulRef = useRef();
+
+    const handleDelete = (e) => {
+        e.preventDefault()
+        dispatch(deleteSpot(id))
+        history.push(`/`)
+    }
 
     // const openMenu = () => {
     //     if (showMenu) return;
@@ -71,12 +77,8 @@ function DetailSpot(){
             modalComponent={<UpdateSpot spot={detail} />}
             />
         </button>
-        {/* <button>
-            <OpenModalMenuItem
-            itemText='delete'
-            modalComponent={<DeleteSpot spot={detail} />}
-            />
-        </button> */}
+        <button onClick={handleDelete}>delete
+        </button>
         </ul>
         </div>
     )
