@@ -18,11 +18,11 @@ module.exports = {
       country: "United states",
       lat: 8.88,
       lng: 1.23,
-      name: 'test',
-      price: 5.99,
+      name: 'Luxury apt',
+      price: 100.00,
       // avgRating: 4.6,
       // previewImage: "test.url",
-      description: 'Test'
+      description: 'Check out this great place to have a unique place to stay'
     },
     {
       ownerId: 2,
@@ -32,11 +32,11 @@ module.exports = {
       country: "United states",
       lat: 12.12,
       lng: 13.13,
-      name: 'test',
+      name: 'Back Bay',
       price: 10.99,
       // avgRating: 4.8,
       // previewImage: "test.url",
-      description: 'Test'
+      description: 'Come checkout beautiful back bay with shops and good eats around'
     },
     {
       ownerId: 3,
@@ -46,11 +46,11 @@ module.exports = {
       country: "United states",
       lat: 18.18,
       lng: 19.23,
-      name: 'test',
+      name: 'Newbury place',
       price: 16.00,
       // avgRating: 4.2,
       // previewImage: "test.url",
-      description: 'Test'
+      description: 'A place to remember your stay'
     }
   ],{})
     /**

@@ -11,18 +11,23 @@ module.exports = {
   return queryInterface.bulkInsert(options, [
     {
       spotId: 1,
-      url: 'http://randomImageURL',
+      url: 'https://res.cloudinary.com/dip4w3xmy/image/upload/v1678047980/383834719_zq1dua.jpg',
       preview: true
     },
     {
       spotId: 1,
-      url: 'http://testURL',
+      url: 'https://res.cloudinary.com/dip4w3xmy/image/upload/v1678048032/APARTMENTS-MAIN_i_xv0b5f.jpg',
       preview: true
     },
     {
     spotId: 2,
-    url: 'testURl',
+    url: 'https://res.cloudinary.com/dip4w3xmy/image/upload/v1678048085/boston-neighborhoods-guide_ll5te9.jpg',
     preview: true
+    },
+    {
+      spotId: 2,
+      url: 'https://res.cloudinary.com/dip4w3xmy/image/upload/v1678048121/Newbury-Street-480x270_z0zcjp.jpg',
+      preview: true
     }
   ])
     /**
