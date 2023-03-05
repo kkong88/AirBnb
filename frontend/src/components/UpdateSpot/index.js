@@ -1,28 +1,28 @@
 import React, {useState} from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { createSpot, getDetail } from '../../store/spot'
 import { updateSpot } from '../../store/spot'
 
 
 
-function CreateSpot() {
+function UpdateSpot({spot}) {
     const dispatch = useDispatch()
-    const [name, setName] = useState('')
-    const [state, setState] = useState('')
-    const [country, setCountry] = useState('')
-    const [city, setCity] = useState('')
-    const [address, setAddress] = useState('')
-    const [description, setDesciption] = useState('')
-    const [price, setPrice] = useState(1)
-    const [previewImage, setPreviewImage] = useState('')
-    const [image1, setImage1] = useState('')
-    const [image2, setImage2] = useState('')
-    const [image3, setImage3] = useState('')
-    const [image4, setImage4] = useState('')
+    const [name, setName] = useState(spot.name)
+    const [state, setState] = useState(spot.state)
+    const [country, setCountry] = useState(spot.country)
+    const [city, setCity] = useState(spot.city)
+    const [address, setAddress] = useState(spot.address)
+    const [description, setDesciption] = useState(spot.description)
+    const [price, setPrice] = useState(spot.price)
+    const [previewImage, setPreviewImage] = useState(spot.previewImage)
+    const [image1, setImage1] = useState(spot.image1)
+    const [image2, setImage2] = useState(spot.image2)
+    const [image3, setImage3] = useState(spot.image3)
+    const [image4, setImage4] = useState(spot.image3)
     const [errors, setErrors] = useState([])
     const history = useHistory()
-
+    const { id } = useParams()
 
     const handleImages = (e) => {
         const {name, value} = e.target;
@@ -65,13 +65,14 @@ function CreateSpot() {
         if(validationError.length) return
 
         const payload = { name, state, country, city, address, description, price, images:[previewImage,image1,image2,image3,image4] }
-        const newSpot = await dispatch(createSpot(payload))
+        const newSpot = await dispatch(updateSpot(spot.id,payload))
         console.log(newSpot)
          if(newSpot){
             const spotId = newSpot.id
-            payload.images.forEach( async(imageUrl, index) => {
-                if(imageUrl.trim() !== "") await dispatch(createSpot(spotId,imageUrl,index))
-            })
+            console.log(spotId)
+            // payload.images.forEach( async(imageUrl, index) => {
+            //     if(imageUrl.trim() !== "") await dispatch(createSpot(spotId,imageUrl,index))
+            // })
             await dispatch(getDetail(spotId))
            history.push(`/spot/${spotId}`)
          }
@@ -182,4 +183,4 @@ function CreateSpot() {
     )
 }
 
-export default CreateSpot
+export default UpdateSpot

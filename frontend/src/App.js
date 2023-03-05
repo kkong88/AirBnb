@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import DetailSpot from "./components/DetailSpot";
 import CreateSpot from "./components/CreateSpot";
+import UpdateSpot from "./components/UpdateSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,9 +20,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route exact path='/' component={LandingPage}></Route>
           <Route exact path='/spot/:id'> <DetailSpot /> </Route>
           <Route exact path='/spots'> <CreateSpot /> </Route>
+          <Route exact path='/'><LandingPage /> </Route>
         </Switch>
       )}
     </>

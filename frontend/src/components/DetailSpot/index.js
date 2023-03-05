@@ -1,12 +1,47 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { getDetail } from '../../store/spot'
+import { useEffect, useState, useRef } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
+import { getDetail, updateSpot } from '../../store/spot'
+import { useModal } from '../../context/Modal'
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
+import UpdateSpot from '../UpdateSpot'
 
 function DetailSpot(){
+    const history = useHistory()
     const dispatch = useDispatch()
     const { id } = useParams()
     const spots = useSelector((state) => state?.spot)
+    const { closeModal } = useModal()
+    const [showMenu, setShowMenu] = useState(false)
+    const ulRef = useRef();
+
+    // const openMenu = () => {
+    //     if (showMenu) return;
+    //     setShowMenu(true);
+    //   };
+
+    //   useEffect(() => {
+    //     if (!showMenu) return;
+
+    //     const closeMenu = (e) => {
+    //       if (!ulRef.current.contains(e.target)) {
+    //         setShowMenu(false);
+    //       }
+    //     };
+
+    //     document.addEventListener('click', closeMenu);
+
+    //     return () => document.removeEventListener("click", closeMenu);
+    //   }, [showMenu]);
+
+    // const closeMenu = () => setShowMenu(false);
+
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault()
+    //     dispatch(getDetail(id))
+    //     //history.push(`/spot/${id}/update`)
+    // }
 
     useEffect(() => {
         dispatch(getDetail(id))
@@ -21,13 +56,28 @@ function DetailSpot(){
         <div>{images?.map(image => (
             <img src={image.url}></img>
         ))}
-        <p>{detail.state}</p>
-        <p>{detail.city}</p>
-        <p>{detail.country}</p>
-        <p>{detail.name}</p>
-        <p>{detail.price}</p>
-        <p>{detail.description}</p>
-        <p>{detail.avgStarRating}</p>
+        <ul>
+        <li>{detail.state}</li>
+        <li>{detail.city}</li>
+        <li>{detail.country}</li>
+        <li>{detail.name}</li>
+        <li>{detail.price}</li>
+        <li>{detail.description}</li>
+        <li>{detail.avgStarRating}</li>
+        <button>
+            <OpenModalMenuItem
+            itemText='update'
+            //onButtonClick={closeMenu}
+            modalComponent={<UpdateSpot spot={detail} />}
+            />
+        </button>
+        {/* <button>
+            <OpenModalMenuItem
+            itemText='delete'
+            modalComponent={<DeleteSpot spot={detail} />}
+            />
+        </button> */}
+        </ul>
         </div>
     )
 }
