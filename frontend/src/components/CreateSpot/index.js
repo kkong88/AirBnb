@@ -133,6 +133,9 @@ function CreateSpot() {
         </label>
         </li>
         <li>
+            <h1>Describe your place to guests</h1>
+            <h2>Mention the best features of your space, any special amentities like
+fast wif or parking, and what you love about the neighborhood.</h2>
         <label>description
             <input
             type='text'
@@ -144,6 +147,9 @@ function CreateSpot() {
         </label>
         </li>
         <li>
+            <h1>Create a title for your spot</h1>
+            <h2>Catch guests' attention with a spot title that highlights what makes
+your place special.</h2>
         <label>name
             <input
             type='text'
@@ -155,7 +161,10 @@ function CreateSpot() {
         </label>
         </li>
         <li>
-        <label>price
+            <h1>Set a base price for your spot</h1>
+            <h2>Competitive pricing can help your listing stand out and rank higher
+in search results.</h2>
+        <label>$ price
             <input
             type='number'
             value={price}
@@ -166,13 +175,14 @@ function CreateSpot() {
         </label>
         </li>
         <li>
+            <h1>Liven up your spot with photos</h1>
+            <h2>Submit a link to at least one photo to publish your spot</h2>
         <label>image
             <input
             type='text'
             name='previewImage'
             placeholder='Preview Image is Required'
             onChange={handleImages}
-
             />
         </label>
         </li>

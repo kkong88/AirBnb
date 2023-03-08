@@ -5,6 +5,7 @@ import { deleteSpot, getDetail, updateSpot } from '../../store/spot'
 import { useModal } from '../../context/Modal'
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import UpdateSpot from '../UpdateSpot'
+import UserReviews from '../UserReviews'
 
 function DetailSpot(){
     const history = useHistory()
@@ -70,6 +71,7 @@ function DetailSpot(){
         <li>{detail.price}</li>
         <li>{detail.description}</li>
         <li>{detail.avgStarRating}</li>
+        <UserReviews spotId={id}/>
         <button>
             <OpenModalMenuItem
             itemText='update'
