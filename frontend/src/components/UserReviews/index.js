@@ -32,7 +32,18 @@ function UserReviews({spotId}){
             <h1>Reviews</h1>
         <div> {reviewArr?.map(review => (
         <div className='EachReview'>
-        {review.review} {review.User.firstName} {review.User.lastName} *{review.star}
+        <div className='reviews'>
+        {review.review}
+        </div>
+        <div className='user'>
+        {review.User.firstName}, {review.User.lastName}
+        </div>
+        <div className='rating'>
+        *{review.star}
+        </div>
+        <div className='time'>
+            {review.createdAt && new Date(review.createdAt).toLocaleDateString('en-US',{month: 'long', year: 'numeric'})}
+        </div>
         </div>
        ))}
        </div>
