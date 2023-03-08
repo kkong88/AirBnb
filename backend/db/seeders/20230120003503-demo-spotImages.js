@@ -28,6 +28,11 @@ module.exports = {
       spotId: 2,
       url: 'https://res.cloudinary.com/dip4w3xmy/image/upload/v1678048121/Newbury-Street-480x270_z0zcjp.jpg',
       preview: true
+    },
+    {
+      spotId: 3,
+      url: 'https://res.cloudinary.com/dip4w3xmy/image/upload/v1678298719/RH-3509Lanewood-1098__e0tycr.jpg',
+      preview: true
     }
   ])
     /**
