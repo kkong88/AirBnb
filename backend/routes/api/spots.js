@@ -6,7 +6,7 @@ const { Review } = require("../../db/models");
 const { SpotImage } = require("../../db/models");
 const { reviewImage } = require("../../db/models");
 const { Booking } = require('../../db/models')
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const spot = require("../../db/models/spot");
 const sequelize = require("sequelize");
@@ -70,7 +70,7 @@ const validateReview = [
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage("Review must contain text"),
-  check("stars")
+  check("star")
     .exists({ checkFalsy: true })
     .notEmpty()
     .isInt({ min: 1, max: 5 })
@@ -500,7 +500,7 @@ router.get("/:id/reviews", async (req, res) => {
 
 //post review by id
 router.post("/:id/reviews", validateReview, requireAuth, async (req, res) => {
-  const { review, stars } = req.body;
+  const { review, star } = req.body;
   let spot = await Spot.findByPk(req.params.id, {
     include: { model: Review },
   });
@@ -508,7 +508,11 @@ router.post("/:id/reviews", validateReview, requireAuth, async (req, res) => {
       res.status(404).json({ message: "Spot couldnt be found", statusCode: 404 });
   }
   const findReview = await Review.findOne({
-    where: {userId: req.user.id}
+    where: {userId: req.user.id},
+    include: [{
+      model: Spot,
+      where: { id: req.params.id }
+  }]
   })
   if (findReview) {
    return res
@@ -522,9 +526,9 @@ router.post("/:id/reviews", validateReview, requireAuth, async (req, res) => {
     userId: req.user.id,
     spotId: Number(req.params.id),
     review: review,
-    star: stars,
+    star: star,
   });
-  res.json(spotReview);
+  return res.json(spotReview);
 });
 
 //Get all bookings for a spot based on spot id
