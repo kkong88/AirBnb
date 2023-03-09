@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getReviews, postReview } from '../../store/review'
 
@@ -7,11 +6,7 @@ import { getReviews, postReview } from '../../store/review'
 function UserReviews({spotId}){
     const dispatch = useDispatch()
     const reviews = useSelector((state) => state.review[spotId])
-    const [Review, setReview] = useState('')
-    const [star, setStar] = useState()
-    const [errors, setErrors] = useState()
 
-    console.log(spotId)
     useEffect(() => {
         dispatch(getReviews(spotId))
     }, [dispatch, spotId])
@@ -23,9 +18,6 @@ function UserReviews({spotId}){
      reviewArr = Object.values(reviews.reviews)
      console.log(reviewArr)
     }
-
-
-
 
     return reviewArr && (
         <div>
@@ -39,7 +31,8 @@ function UserReviews({spotId}){
         {review.User.firstName}, {review.User.lastName}
         </div>
         <div className='rating'>
-        *{review.star}
+        <i className="fa-regular fa-star"></i>
+        {review.star}
         </div>
         <div className='time'>
             {review.createdAt && new Date(review.createdAt).toLocaleDateString('en-US',{month: 'long', year: 'numeric'})}

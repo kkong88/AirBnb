@@ -19,16 +19,21 @@ export const loadReviews = (reviews) => {
     }
 }
 
-export const postReview = (spotId,reviews) => async dispatch => {
+export const postReview = (reviewData) => async dispatch => {
+    let {review, star, spotId} = reviewData
+    spotId = parseInt(spotId)
+    star = parseInt(star)
 
-    const response = await csrfFetch(`api/spots/${spotId}/reviews`, {
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: "POST",
-        body: JSON.stringify(reviews)
+        body: JSON.stringify({review, star})
     })
+    console.log(response)
     if(response.ok){
-        const review = await response.json()
-        dispatch(createReview())
-        return review
+        const newReview = await response.json()
+        dispatch(createReview(newReview))
+        console.log(newReview)
+        return newReview
     }
 }
 
@@ -46,9 +51,8 @@ const initialState = {}
 const reviewReducer = (state = initialState, action) => {
     switch(action.type){
         case POST_REVIEW:
-            return {...state, ...action.spotId}
+            return {...state, ...action.reviews}
         case GET_REVIEWS:
-            console.log(action.reviews.reviews,"!!!!!!")
             const newState = { ...state }
             if(action.reviews.reviews.length){
             newState[action.reviews.reviews[0].spotId] = action.reviews

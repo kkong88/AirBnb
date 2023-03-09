@@ -66,7 +66,7 @@ function CreateSpot() {
 
         const payload = { name, state, country, city, address, description, price, images:[previewImage,image1,image2,image3,image4] }
         const newSpot = await dispatch(createSpot(payload))
-        console.log(newSpot)
+        
          if(newSpot){
             const spotId = newSpot.id
             payload.images.forEach( async(imageUrl, index) => {

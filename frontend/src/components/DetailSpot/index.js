@@ -6,6 +6,7 @@ import { useModal } from '../../context/Modal'
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import UpdateSpot from '../UpdateSpot'
 import UserReviews from '../UserReviews'
+import CreateReview from '../CreateReview'
 
 function DetailSpot(){
     const history = useHistory()
@@ -71,7 +72,6 @@ function DetailSpot(){
         <li>{detail.price}</li>
         <li>{detail.description}</li>
         <li>{detail.avgStarRating}</li>
-        <UserReviews spotId={id}/>
         <button>
             <OpenModalMenuItem
             itemText='update'
@@ -81,6 +81,12 @@ function DetailSpot(){
         </button>
         <button onClick={handleDelete}>delete
         </button>
+         <CreateReview />
+         <OpenModalMenuItem
+         itemText='Create a Review'
+         modalComponent={<CreateReview spotId={id}/> }
+         />
+        <UserReviews spotId={id}/>
         </ul>
         </div>
     )
