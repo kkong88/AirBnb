@@ -126,12 +126,13 @@ router.put('/:id', validateImage ,requireAuth, async (req, res) =>{
 
 // delete a review
 router.delete('/:id', requireAuth, async (req, res) => {
+    console.log(req.params.id)
     const reviews = await Review.findByPk(req.params.id)
     if(!reviews){
-        res.status(404).json({message: 'Review couldnt be found', statusCode: 404})
+       return res.status(404).json({message: 'Review couldnt be found', statusCode: 404})
     } else {
         await reviews.destroy()
-        res.status(200).json({message: 'Successfully deleted', statusCode: 200})
+        return res.status(200).json(reviews)
     }
 })
 

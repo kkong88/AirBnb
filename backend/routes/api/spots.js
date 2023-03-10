@@ -447,7 +447,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
       .json({ message: "Spot couldnt be found", statusCode: 404 });
   }
   await spot.destroy();
-  res.json({ message: "Successfully deleted", statusCode: 200});
+  return res.json(spot);
 });
 
 // update/edit spot by id
