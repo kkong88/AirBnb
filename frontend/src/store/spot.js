@@ -81,16 +81,15 @@ export const createSpot = (spots) => async (dispatch) => {
 }
 
 export const getDetail = (id) => async dispatch => {
-    const response = await fetch(`/api/spots/${id}`)
+    const response = await csrfFetch(`/api/spots/${id}`)
     if(response.ok){
         const data = await response.json()
         dispatch(detailSpot(data))
-        return response
+        return data
     }
 }
 
 export const updateSpot = (spotId, spots) => async (dispatch) => {
-    console.log(spots, spotId)
     const response = await csrfFetch(`/api/spots/${spotId}`,{
         method: "PUT",
         body: JSON.stringify(spots)
@@ -110,7 +109,6 @@ export const getSpot = () => async dispatch => {
 }
 
 export const deleteSpot = (spotId) => async dispatch => {
-    console.log(spotId)
     const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: "DELETE"
     })

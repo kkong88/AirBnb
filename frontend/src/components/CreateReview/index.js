@@ -1,31 +1,31 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { postReview } from "../../store/review";
+import { getReviews, loadReviews, postReview } from "../../store/review";
 import { useModal } from "../../context/Modal";
 
 function CreateReview({spotId, userId}){
     const dispatch = useDispatch()
-    const history = useHistory
+    const history = useHistory()
     const {closeModal} = useModal()
     const [review, setReview] = useState("")
     const [star, setStar] = useState(Number)
     const [errors, setErrors] = useState([])
 
 
-    const handleReview = (e) => {
-        const {name, value} = e.target
-        switch(name){
-            case "review":
-                setReview(value)
-                break;
-            case 'star':
-                setStar(value)
-                break;
-            default:
-                return
-        }
-    }
+    // const handleReview = (e) => {
+    //     const {name, value} = e.target
+    //     switch(name){
+    //         case "review":
+    //             setReview(value)
+    //             break;
+    //         case 'star':
+    //             setStar(value)
+    //             break;
+    //         default:
+    //             return
+    //     }
+    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -35,6 +35,7 @@ function CreateReview({spotId, userId}){
         const payload = { review, star, spotId, userId }
         const newReview = await dispatch(postReview(payload))
         closeModal()
+        await dispatch(getReviews(spotId))
         return newReview
     }
 

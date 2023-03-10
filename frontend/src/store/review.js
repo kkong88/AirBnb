@@ -2,10 +2,17 @@ import { csrfFetch } from "./csrf"
 
 const GET_REVIEWS = 'reviews/GET_REVIEWS'
 const POST_REVIEW = 'reviews/POST_REVIEW'
+const DELETE = 'reviews/DELETE'
 
+
+export const deleteReview = (reviewId) => {
+    return {
+    type: DELETE,
+    reviewId
+    }
+}
 
 export const createReview = (reviews) => {
-    console.log(reviews)
     return {
         type: POST_REVIEW,
         reviews
@@ -19,20 +26,31 @@ export const loadReviews = (reviews) => {
     }
 }
 
+export const removeReview = (reviewId) => async dispatch => {
+    console.log(reviewId,"**********")
+    const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: "DELETE"
+    })
+    if(response){
+        const data = await response.json()
+        dispatch(deleteReview(data))
+        return data
+    }
+}
+
 export const postReview = (reviewData) => async dispatch => {
     let {review, star, spotId} = reviewData
-    spotId = parseInt(spotId)
+    // spotId = parseInt(spotId)
     star = parseInt(star)
+    console.log(spotId)
 
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: "POST",
         body: JSON.stringify({review, star})
     })
-    console.log(response)
     if(response.ok){
         const newReview = await response.json()
         dispatch(createReview(newReview))
-        console.log(newReview)
         return newReview
     }
 }
@@ -42,22 +60,27 @@ export const getReviews = (spotId) => async dispatch => {
     if(response.ok){
         const data = await response.json()
         dispatch(loadReviews(data))
-        return response
+        return data
     }
 }
 
 const initialState = {}
 
 const reviewReducer = (state = initialState, action) => {
+    let newState = {}
     switch(action.type){
         case POST_REVIEW:
             return {...state, ...action.reviews}
         case GET_REVIEWS:
-            const newState = { ...state }
+            newState = { ...state }
             if(action.reviews.reviews.length){
             newState[action.reviews.reviews[0].spotId] = action.reviews
             }
             return { ...newState }
+        case DELETE:
+            newState = {...state}
+            delete newState[action.reviewId.id]
+            return newState
         default:
             return state
     }

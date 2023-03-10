@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { getReviews, postReview } from '../../store/review'
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
+import DeleteReview from '../DeleteReview'
 
 
 function UserReviews({spotId}){
@@ -16,7 +18,6 @@ function UserReviews({spotId}){
 
     if(reviews) {
      reviewArr = Object.values(reviews.reviews)
-     console.log(reviewArr)
     }
 
     return reviewArr && (
@@ -37,6 +38,12 @@ function UserReviews({spotId}){
         <div className='time'>
             {review.createdAt && new Date(review.createdAt).toLocaleDateString('en-US',{month: 'long', year: 'numeric'})}
         </div>
+        <button>
+            <OpenModalMenuItem
+            itemText='Delete'
+            modalComponent={<DeleteReview spotId={spotId} reviewId={review.id}/>}
+            />
+        </button>
         </div>
        ))}
        </div>

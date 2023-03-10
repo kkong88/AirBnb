@@ -7,6 +7,7 @@ import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import UpdateSpot from '../UpdateSpot'
 import UserReviews from '../UserReviews'
 import CreateReview from '../CreateReview'
+import DeleteReview from '../DeleteReview'
 
 function DetailSpot(){
     const history = useHistory()
@@ -16,6 +17,8 @@ function DetailSpot(){
     const { closeModal } = useModal()
     const [showMenu, setShowMenu] = useState(false)
     const ulRef = useRef();
+
+
 
     const handleDelete = (e) => {
         e.preventDefault()
@@ -65,6 +68,7 @@ function DetailSpot(){
             <img src={image.url}></img>
         ))}
         <ul>
+        <li>{detail.Owner.firstName}, {detail.Owner.lastName}</li>
         <li>{detail.state}</li>
         <li>{detail.city}</li>
         <li>{detail.country}</li>
@@ -87,6 +91,14 @@ function DetailSpot(){
          modalComponent={<CreateReview spotId={id}/> }
          />
         <UserReviews spotId={id}/>
+        {/* {review.reviews?.map(currentReview =>(
+        <button>
+            <OpenModalMenuItem
+            itemText='Delete'
+            modalComponent={<DeleteReview spotId={id} reviewId={currentReview.id}/>}
+            />
+        </button>
+         ))} */}
         </ul>
         </div>
     )

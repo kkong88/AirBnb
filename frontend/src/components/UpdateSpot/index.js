@@ -66,10 +66,8 @@ function UpdateSpot({spot}) {
 
         const payload = { name, state, country, city, address, description, price, images:[previewImage,image1,image2,image3,image4] }
         const newSpot = await dispatch(updateSpot(spot.id,payload))
-        console.log(newSpot)
          if(newSpot){
             const spotId = newSpot.id
-            console.log(spotId)
             // payload.images.forEach( async(imageUrl, index) => {
             //     if(imageUrl.trim() !== "") await dispatch(createSpot(spotId,imageUrl,index))
             // })
