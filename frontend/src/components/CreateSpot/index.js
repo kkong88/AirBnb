@@ -66,7 +66,7 @@ function CreateSpot() {
 
         const payload = { name, state, country, city, address, description, price, images:[previewImage,image1,image2,image3,image4] }
         const newSpot = await dispatch(createSpot(payload))
-        
+
          if(newSpot){
             const spotId = newSpot.id
             payload.images.forEach( async(imageUrl, index) => {
@@ -182,6 +182,30 @@ in search results.</h2>
             type='text'
             name='previewImage'
             placeholder='Preview Image is Required'
+            onChange={handleImages}
+            />
+             <input
+            type='text'
+            name='Image1'
+            placeholder="Images"
+            onChange={handleImages}
+            />
+             <input
+            type='text'
+            name='Image2'
+            placeholder="Images"
+            onChange={handleImages}
+            />
+             <input
+            type='text'
+            name='Image3'
+            placeholder="Images"
+            onChange={handleImages}
+            />
+             <input
+            type='text'
+            name='Image4'
+            placeholder="Images"
             onChange={handleImages}
             />
         </label>

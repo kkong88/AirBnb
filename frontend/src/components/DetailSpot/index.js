@@ -19,7 +19,6 @@ function DetailSpot(){
     const ulRef = useRef();
 
 
-
     const handleDelete = (e) => {
         e.preventDefault()
         dispatch(deleteSpot(id))

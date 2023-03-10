@@ -9,7 +9,7 @@ function CreateReview({spotId, userId}){
     const history = useHistory()
     const {closeModal} = useModal()
     const [review, setReview] = useState("")
-    const [star, setStar] = useState(Number)
+    const [star, setStar] = useState(1)
     const [errors, setErrors] = useState([])
 
 
@@ -53,6 +53,8 @@ function CreateReview({spotId, userId}){
             <label>
                 <input
                 type='number'
+                min="1"
+                max="5"
                 value={star}
                 onChange={(e) =>setStar(e.target.value)}
                 />

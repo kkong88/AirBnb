@@ -19,9 +19,9 @@ function DeleteReview({reviewId, spotId}){
 
     const handleDelete = async() => {
         await dispatch(removeReview(reviewId))
+        .then(closeModal)
         await dispatch(getReviews(spotId))
         await dispatch(getDetail(spotId))
-        closeModal()
     }
 
     const handleCancel = () => {

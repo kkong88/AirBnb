@@ -7,18 +7,21 @@ import DeleteReview from '../DeleteReview'
 
 function UserReviews({spotId}){
     const dispatch = useDispatch()
-    const reviews = useSelector((state) => state?.review[spotId])
+    const reviews = useSelector((state) => state.review)
+    const tempArr = Object.values(reviews)
+    const reviewArr = tempArr.filter(review => review.spotId == spotId)
 
     useEffect(() => {
         dispatch(getReviews(spotId))
     }, [dispatch, spotId])
 
-    let reviewArr;
+    // let reviewArr;
     let user
 
-    if(reviews) {
-     reviewArr = Object.values(reviews.reviews)
-    }
+    // if(reviews) {
+    //  reviewArr = Object.values(reviews.reviews)
+    // }
+
 
 
     return reviewArr && (

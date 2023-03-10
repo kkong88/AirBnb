@@ -72,20 +72,17 @@ const reviewReducer = (state = initialState, action) => {
             return {...state, ...action.reviews}
         case GET_REVIEWS:
             newState = { ...state }
-            if(action.reviews.reviews.length){
-            newState[action.reviews.reviews[0].spotId] = action.reviews
+            action.reviews.reviews.forEach(review => {
+                newState[review.id] = review
+            })
             return {...newState}
-            } else {
-                return {...newState}
-            }
         case DELETE:
             newState = {...state}
-            delete newState[action.reviewId]
+            delete newState[action.reviewId.id]
             return newState
         default:
             return state
     }
-
 }
 
 export default reviewReducer
