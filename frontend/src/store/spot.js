@@ -101,6 +101,14 @@ export const updateSpot = (spotId, spots) => async (dispatch) => {
     }
 }
 
+export const getCurrentUserSpots = () => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/current`)
+    const spots = await response.json
+    dispatch(getSpot(spots))
+}
+
+
+
 export const getSpot = () => async dispatch => {
     const response = await fetch('/api/spots')
     const data = await response.json()

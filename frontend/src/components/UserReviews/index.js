@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
-import { getReviews, postReview } from '../../store/review'
+import { getReviews, postReview, removeReview } from '../../store/review'
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import DeleteReview from '../DeleteReview'
 
 
 function UserReviews({spotId}){
     const dispatch = useDispatch()
-    const reviews = useSelector((state) => state.review[spotId])
+    const reviews = useSelector((state) => state?.review[spotId])
 
     useEffect(() => {
         dispatch(getReviews(spotId))
@@ -19,6 +19,7 @@ function UserReviews({spotId}){
     if(reviews) {
      reviewArr = Object.values(reviews.reviews)
     }
+
 
     return reviewArr && (
         <div>

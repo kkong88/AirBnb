@@ -26,33 +26,6 @@ function DetailSpot(){
         history.push(`/`)
     }
 
-    // const openMenu = () => {
-    //     if (showMenu) return;
-    //     setShowMenu(true);
-    //   };
-
-    //   useEffect(() => {
-    //     if (!showMenu) return;
-
-    //     const closeMenu = (e) => {
-    //       if (!ulRef.current.contains(e.target)) {
-    //         setShowMenu(false);
-    //       }
-    //     };
-
-    //     document.addEventListener('click', closeMenu);
-
-    //     return () => document.removeEventListener("click", closeMenu);
-    //   }, [showMenu]);
-
-    // const closeMenu = () => setShowMenu(false);
-
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault()
-    //     dispatch(getDetail(id))
-    //     //history.push(`/spot/${id}/update`)
-    // }
 
     useEffect(() => {
         dispatch(getDetail(id))
@@ -79,17 +52,17 @@ function DetailSpot(){
         <button>
             <OpenModalMenuItem
             itemText='update'
-            //onButtonClick={closeMenu}
             modalComponent={<UpdateSpot spot={detail} />}
             />
         </button>
         <button onClick={handleDelete}>delete
         </button>
-         <CreateReview />
+        <p>
          <OpenModalMenuItem
          itemText='Create a Review'
          modalComponent={<CreateReview spotId={id}/> }
          />
+        </p>
         <UserReviews spotId={id}/>
         {/* {review.reviews?.map(currentReview =>(
         <button>

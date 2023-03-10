@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { removeReview } from "../../store/review";
+import { getReviews, removeReview } from "../../store/review";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import { useModal } from '../../context/Modal'
 import { useState } from "react";
@@ -17,9 +17,9 @@ function DeleteReview({reviewId, spotId}){
     const currentReview = useSelector((state) => state?.review)
     const currentUserReview = currentReview?.reviews?.find((review) => review.user.id === currentUser.id && review.id === reviewId)
 
-    const handleDelete = async (e) => {
-        e.preventDefault()
+    const handleDelete = async() => {
         await dispatch(removeReview(reviewId))
+        await dispatch(getReviews(spotId))
         await dispatch(getDetail(spotId))
         closeModal()
     }
@@ -33,6 +33,7 @@ function DeleteReview({reviewId, spotId}){
         <button onClick={handleCancel}>Cancel</button>
         </>
     )
+
 }
 
 

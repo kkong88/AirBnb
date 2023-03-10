@@ -5,12 +5,6 @@ const POST_REVIEW = 'reviews/POST_REVIEW'
 const DELETE = 'reviews/DELETE'
 
 
-export const deleteReview = (reviewId) => {
-    return {
-    type: DELETE,
-    reviewId
-    }
-}
 
 export const createReview = (reviews) => {
     return {
@@ -26,15 +20,10 @@ export const loadReviews = (reviews) => {
     }
 }
 
-export const removeReview = (reviewId) => async dispatch => {
-    console.log(reviewId,"**********")
-    const response = await csrfFetch(`/api/reviews/${reviewId}`, {
-        method: "DELETE"
-    })
-    if(response){
-        const data = await response.json()
-        dispatch(deleteReview(data))
-        return data
+export const deleteReview = (reviewId) => {
+    return {
+    type: DELETE,
+    reviewId
     }
 }
 
@@ -42,7 +31,6 @@ export const postReview = (reviewData) => async dispatch => {
     let {review, star, spotId} = reviewData
     // spotId = parseInt(spotId)
     star = parseInt(star)
-    console.log(spotId)
 
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: "POST",
@@ -52,6 +40,17 @@ export const postReview = (reviewData) => async dispatch => {
         const newReview = await response.json()
         dispatch(createReview(newReview))
         return newReview
+    }
+}
+
+export const removeReview = (reviewId) => async dispatch => {
+    const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: "DELETE"
+    })
+    if(response){
+        const data = await response.json()
+        dispatch(deleteReview(data))
+        return data
     }
 }
 
@@ -75,11 +74,13 @@ const reviewReducer = (state = initialState, action) => {
             newState = { ...state }
             if(action.reviews.reviews.length){
             newState[action.reviews.reviews[0].spotId] = action.reviews
+            return {...newState}
+            } else {
+                return {...newState}
             }
-            return { ...newState }
         case DELETE:
             newState = {...state}
-            delete newState[action.reviewId.id]
+            delete newState[action.reviewId]
             return newState
         default:
             return state
