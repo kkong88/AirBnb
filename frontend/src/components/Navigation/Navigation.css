@@ -2,7 +2,9 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
+    border-bottom: 2 px black;
 }
+
 .profile {
     display: flex;
     flex-direction: row-reverse;
