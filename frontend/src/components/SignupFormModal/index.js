@@ -31,11 +31,13 @@ function SignupFormModal() {
 
   return (
     <>
-      <h1>Sign Up</h1>
+      <h1 className="sign">Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
+        <div className="wrapper">
+        <div>
         <label>
           Email
           <input
@@ -45,6 +47,8 @@ function SignupFormModal() {
             required
           />
         </label>
+        </div>
+        <div>
         <label>
           Username
           <input
@@ -54,6 +58,8 @@ function SignupFormModal() {
             required
           />
         </label>
+        </div>
+        <div>
         <label>
           First Name
           <input
@@ -63,6 +69,8 @@ function SignupFormModal() {
             required
           />
         </label>
+        </div>
+        <div>
         <label>
           Last Name
           <input
@@ -72,6 +80,8 @@ function SignupFormModal() {
             required
           />
         </label>
+        </div>
+        <div>
         <label>
           Password
           <input
@@ -81,6 +91,8 @@ function SignupFormModal() {
             required
           />
         </label>
+        </div>
+        <div>
         <label>
           Confirm Password
           <input
@@ -90,7 +102,11 @@ function SignupFormModal() {
             required
           />
         </label>
+        </div>
+        <div>
         <button type="submit">Sign Up</button>
+        </div>
+        </div>
       </form>
     </>
   );

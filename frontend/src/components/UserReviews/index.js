@@ -15,7 +15,7 @@ function UserReviews({spotId}){
     const currentUser = useSelector((state) => state?.session?.user)
     const detail = spots?.spotDetail
 
-    
+
     const spotOwner = currentUser && spots && currentUser?.id === reviews.userId
 
 
@@ -45,7 +45,7 @@ function UserReviews({spotId}){
         <div className='time'>
             {review.createdAt && new Date(review.createdAt).toLocaleDateString('en-US',{month: 'long', year: 'numeric'})}
         </div>
-        {(currentUser.id === review.userId) && (
+        {(currentUser?.id === review?.userId) && (
         <button>
             <OpenModalMenuItem
             itemText='Delete'

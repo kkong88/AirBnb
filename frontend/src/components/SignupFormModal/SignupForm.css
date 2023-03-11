@@ -1,0 +1,9 @@
+.sign {
+    text-align: center;
+}
+
+
+.wrapper div{
+    text-align: center;
+    justify-content: space-between;
+}

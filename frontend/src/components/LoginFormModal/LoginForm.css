@@ -1,1 +1,15 @@
 
+.login{
+    text-align: center;
+}
+.demo{
+    text-align: center;
+    text-decoration: solid;
+    font-weight: bold;
+}
+.lable{
+    font-weight: bold;
+}
+.password{
+    font-weight: bold;
+}
