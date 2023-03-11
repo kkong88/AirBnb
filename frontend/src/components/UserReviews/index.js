@@ -5,15 +5,19 @@ import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
 import DeleteReview from '../DeleteReview'
 
 
-function UserReviews({spotId,spots}){
+function UserReviews({spotId}){
     const dispatch = useDispatch()
-    const reviews = useSelector((state) => state.review)
+    const reviews = useSelector((state) => state?.review)
     const tempArr = Object.values(reviews)
-    const reviewArr = tempArr.filter(review => review.spotId == spotId)
+    const reviewArr = tempArr.filter(review => review?.spotId == spotId)
+    const spots = useSelector((state) => state?.spot)
 
-    const currentUser = useSelector((state) => state.session.user)
+    const currentUser = useSelector((state) => state?.session?.user)
+    const detail = spots?.spotDetail
 
-    const spotOwner = currentUser && spots && currentUser.id === spots.ownerId
+    const spotOwner = currentUser && spots && currentUser?.id === detail?.ownerId
+    console.log(spotOwner)
+
 
     useEffect(() => {
         dispatch(getReviews(spotId))

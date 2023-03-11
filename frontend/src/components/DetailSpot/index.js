@@ -20,8 +20,6 @@ function DetailSpot(){
 
     const spotOwner = currentUser && spots && currentUser?.id === detail?.ownerId
 
-    console.log(currentUser)
-    console.log(spotOwner,"!!!!!!!")
 
 
     const handleDelete = (e) => {
@@ -52,7 +50,7 @@ function DetailSpot(){
         <li>{detail.price}</li>
         <li>{detail.description}</li>
         <li>{detail.avgStarRating}</li>
-        {(!currentUser.id === spotOwner || spotOwner) || (
+        {(!currentUser === spotOwner || spotOwner) || (
         <button>
             <OpenModalMenuItem
             itemText='update'
@@ -60,11 +58,11 @@ function DetailSpot(){
             />
         </button>
         )}
-         {(!currentUser.id === spotOwner || spotOwner) || (
+         {(!currentUser === spotOwner || spotOwner) || (
         <button onClick={handleDelete}>delete
         </button>
          )}
-        {(!currentUser || spotOwner) || (
+        {(!currentUser === !spotOwner || spotOwner) || (
         <p>
         <button>
          <OpenModalMenuItem
