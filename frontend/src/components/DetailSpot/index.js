@@ -50,7 +50,7 @@ function DetailSpot(){
         <li>{detail.price}</li>
         <li>{detail.description}</li>
         <li>{detail.avgStarRating}</li>
-        {(!currentUser === spotOwner || spotOwner) || (
+        {(!currentUser === spotOwner || !spotOwner) || (
         <button>
             <OpenModalMenuItem
             itemText='update'
@@ -58,7 +58,7 @@ function DetailSpot(){
             />
         </button>
         )}
-         {(!currentUser === spotOwner || spotOwner) || (
+         {(!currentUser === spotOwner || !spotOwner) || (
         <button onClick={handleDelete}>delete
         </button>
          )}
