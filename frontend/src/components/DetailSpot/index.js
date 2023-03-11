@@ -14,9 +14,14 @@ function DetailSpot(){
     const dispatch = useDispatch()
     const { id } = useParams()
     const spots = useSelector((state) => state?.spot)
-    const { closeModal } = useModal()
-    const [showMenu, setShowMenu] = useState(false)
-    const ulRef = useRef();
+    const currentUser = useSelector((state) => state.session.user)
+
+    const detail = spots?.spotDetail
+
+    const spotOwner = currentUser && spots && currentUser?.id === detail?.ownerId
+
+    console.log(currentUser)
+    console.log(spotOwner,"!!!!!!!")
 
 
     const handleDelete = (e) => {
@@ -30,7 +35,6 @@ function DetailSpot(){
         dispatch(getDetail(id))
     },[dispatch, id])
 
-    const detail = spots?.spotDetail
 
     if(detail === undefined) return <div>loading</div>
     const images = spots?.spotDetail.SpotImages
@@ -48,29 +52,29 @@ function DetailSpot(){
         <li>{detail.price}</li>
         <li>{detail.description}</li>
         <li>{detail.avgStarRating}</li>
+        {(!currentUser.id === spotOwner || spotOwner) || (
         <button>
             <OpenModalMenuItem
             itemText='update'
             modalComponent={<UpdateSpot spot={detail} />}
             />
         </button>
+        )}
+         {(!currentUser.id === spotOwner || spotOwner) || (
         <button onClick={handleDelete}>delete
         </button>
+         )}
+        {(!currentUser || spotOwner) || (
         <p>
+        <button>
          <OpenModalMenuItem
          itemText='Create a Review'
          modalComponent={<CreateReview spotId={id}/> }
          />
-        </p>
-        <UserReviews spotId={id}/>
-        {/* {review.reviews?.map(currentReview =>(
-        <button>
-            <OpenModalMenuItem
-            itemText='Delete'
-            modalComponent={<DeleteReview spotId={id} reviewId={currentReview.id}/>}
-            />
         </button>
-         ))} */}
+        </p>
+        )}
+        <UserReviews spotId={id}/>
         </ul>
         </div>
     )
