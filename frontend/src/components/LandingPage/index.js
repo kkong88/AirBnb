@@ -17,16 +17,18 @@ function LandingPage(){
     const previewImage = spots?.Spot
 
     return (
-    <div className='body'>
+    <div class='body'>
         {previewImage?.map(spot => (
              <div key={spot.id}>
                 <NavLink to={`/spot/${spot.id}`}>
-                 <img className="img" src={spot.previewImage} alt={spot.name} />
+                 <img className="images" src={spot.previewImage} alt={spot.name} />
+                 <div class='containter'>
                  <span className='state'> {spot.city}, {spot.state}</span>
                  <span> ${spot.price} </span>
                  <span className='review'> {spot.avgStarRating}
                   <i className='fa-solid fa-star'/>
                  </span>
+                 </div>
                  </NavLink>
             </div>
         ))}

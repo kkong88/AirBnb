@@ -1,0 +1,36 @@
+/* .images {
+    float: left;
+    width:  500px;
+    height: 500px;
+    border-radius: 5px 5px 0 0;
+    border-color:  solid black;
+    object-fit: cover;
+}
+.detail {
+    display:inline-flex
+} */
+main {
+    margin: 0;
+    padding: 0;
+  }
+
+.body-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 0 20px;
+  }
+
+  .images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 3px;
+    width: 100%;
+    height: 500px;
+    margin-bottom: 20px;
+  }
+  .host {
+    display: flex;
+    justify-content: space-between;
+  }

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { createSpot, getDetail } from '../../store/spot'
 import { updateSpot } from '../../store/spot'
-
+import './CreateSpot.css'
 
 
 function CreateSpot() {
@@ -14,7 +14,7 @@ function CreateSpot() {
     const [city, setCity] = useState('')
     const [address, setAddress] = useState('')
     const [description, setDesciption] = useState('')
-    const [price, setPrice] = useState(1)
+    const [price, setPrice] = useState(Number)
     const [previewImage, setPreviewImage] = useState('')
     const [image1, setImage1] = useState('')
     const [image2, setImage2] = useState('')
@@ -78,7 +78,7 @@ function CreateSpot() {
     }
 
     return (
-        <>
+        <div className='create'>
         <h1>Create a New Spot</h1>
         <h2>Where's your place located</h2>
         <ul>
@@ -89,7 +89,7 @@ function CreateSpot() {
         </ul>
         <form onSubmit={handleSubmit}>
         <li>
-        <label>country
+        <label>Country
             <input
             type="text"
             value={country}
@@ -100,7 +100,7 @@ function CreateSpot() {
         </label>
         </li>
         <li>
-        <label>street address
+        <label>Street Address
             <input
             type='text'
             value={address}
@@ -111,7 +111,7 @@ function CreateSpot() {
         </label>
         </li>
         <li>
-        <label>city
+        <label>City
             <input
             type='text'
             value={city}
@@ -122,17 +122,15 @@ function CreateSpot() {
         </label>
         </li>
         <li>
-        <label>state
+        <label>State
             <input
             type='text'
             value={state}
             placeholder="State is Required"
             onChange={(e) =>setState(e.target.value)}
-
             />
         </label>
         </li>
-        <li>
             <h1>Describe your place to guests</h1>
             <h2>Mention the best features of your space, any special amentities like
 fast wif or parking, and what you love about the neighborhood.</h2>
@@ -145,12 +143,11 @@ fast wif or parking, and what you love about the neighborhood.</h2>
 
             />
         </label>
-        </li>
         <li>
             <h1>Create a title for your spot</h1>
             <h2>Catch guests' attention with a spot title that highlights what makes
 your place special.</h2>
-        <label>name
+        <label>Name
             <input
             type='text'
             value={name}
@@ -164,44 +161,49 @@ your place special.</h2>
             <h1>Set a base price for your spot</h1>
             <h2>Competitive pricing can help your listing stand out and rank higher
 in search results.</h2>
-        <label>$ price
+        <label>$ Price
             <input
             type='number'
             value={price}
+            min="1"
             placeholder='Price is required'
             onChange={(e) =>setPrice(e.target.value)}
-
             />
         </label>
         </li>
         <li>
             <h1>Liven up your spot with photos</h1>
             <h2>Submit a link to at least one photo to publish your spot</h2>
-        <label>image
+        <label>Images
+            <br />
             <input
             type='text'
             name='previewImage'
             placeholder='Preview Image is Required'
             onChange={handleImages}
             />
+            <br />
              <input
             type='text'
             name='Image1'
             placeholder="Images"
             onChange={handleImages}
             />
+            <br />
              <input
             type='text'
             name='Image2'
             placeholder="Images"
             onChange={handleImages}
             />
+            <br />
              <input
             type='text'
             name='Image3'
             placeholder="Images"
             onChange={handleImages}
             />
+            <br />
              <input
             type='text'
             name='Image4'
@@ -212,7 +214,7 @@ in search results.</h2>
         </li>
         <button type="submit">Create</button>
         </form>
-        </>
+        </div>
     )
 }
 

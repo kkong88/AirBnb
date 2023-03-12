@@ -8,6 +8,7 @@ import UpdateSpot from '../UpdateSpot'
 import UserReviews from '../UserReviews'
 import CreateReview from '../CreateReview'
 import DeleteReview from '../DeleteReview'
+import "./DetailSpot.css"
 
 function DetailSpot(){
     const history = useHistory()
@@ -38,18 +39,19 @@ function DetailSpot(){
     const images = spots?.spotDetail.SpotImages
 
     return (
-        <div>{images?.map(image => (
-            <img src={image.url}></img>
+        <div className='body-container'>
+        <div className='image-container'>
+            {images?.map(image => (
+            <img src={image.url} className='images'></img>
         ))}
-        <ul>
-        <li>{detail.Owner.firstName}, {detail.Owner.lastName}</li>
-        <li>{detail.state}</li>
-        <li>{detail.city}</li>
-        <li>{detail.country}</li>
-        <li>{detail.name}</li>
-        <li>{detail.price}</li>
-        <li>{detail.description}</li>
-        <li>{detail.avgStarRating}</li>
+        </div>
+        <ul className='detail'>
+        <h2 className=''>{detail.name}</h2>
+        <h1 className='host'>Hosted By: {detail.Owner.firstName}, {detail.Owner.lastName}</h1>
+        <div className='location'> {detail.city}, {detail.state}, {detail.country} </div>
+        <div>${detail.price}/night</div>
+        <div>{detail.description}</div>
+        <div>{detail.avgStarRating} <i className="fa-sharp fa-solid fa-star"></i></div>
         {(!currentUser === spotOwner || !spotOwner) || (
         <button>
             <OpenModalMenuItem

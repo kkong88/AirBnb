@@ -1,16 +1,23 @@
 .navBar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 50px;
-    border-bottom: 2 px black;
+    height: 120px;
+    margin-bottom: 75px;
+    border-bottom: solid black 2px;
 }
 
 .profile {
     display: flex;
+    margin-top: 45px;
     flex-direction: row-reverse;
 }
 .profile > li {
+    display: block;
     margin: 25px;
+    background: transparent;
+    cursor: pointer;
+    text-align: inherit;
+    background-color: white;
 }
 
 .hidden {
