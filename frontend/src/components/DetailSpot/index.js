@@ -49,11 +49,12 @@ function DetailSpot(){
         <h2 className=''>{detail.name}</h2>
         <h1 className='host'>Hosted By: {detail.Owner.firstName}, {detail.Owner.lastName}</h1>
         <div className='location'> {detail.city}, {detail.state}, {detail.country} </div>
-        <div>${detail.price}/night</div>
+        <div>{detail.address}</div>
+        <div>${detail.price} /night</div>
         <div>{detail.description}</div>
         <div>{detail.avgStarRating} <i className="fa-sharp fa-solid fa-star"></i></div>
         {(!currentUser === spotOwner || !spotOwner) || (
-        <button>
+        <button className='button-update-delete'>
             <OpenModalMenuItem
             itemText='update'
             modalComponent={<UpdateSpot spot={detail} />}
@@ -61,12 +62,12 @@ function DetailSpot(){
         </button>
         )}
          {(!currentUser === spotOwner || !spotOwner) || (
-        <button onClick={handleDelete}>delete
+        <button onClick={handleDelete} className='button-update-delete'>delete
         </button>
          )}
         {(!currentUser === !spotOwner || spotOwner) || (
         <p>
-        <button>
+        <button className='review-button'>
          <OpenModalMenuItem
          itemText='Create a Review'
          modalComponent={<CreateReview spotId={id}/> }
