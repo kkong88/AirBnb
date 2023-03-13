@@ -34,7 +34,7 @@ module.exports = {
       lng: 1.23,
       name: 'Luxury Beautiful riverfront mid-century house',
       price: 790.00,
-      description: 'We are conveniently located minutes from downtown Newburgh, and just over the bridge from the Beacon train station. 90 mins by train, or about a one-hour drive from NYC. The house is within minutes of the best the Hudson Valley has to offer, including Storm King (15min), Dia Beacon (15min), great hiking trails, local farms and distilleries, Woodbury Commons (25min), Mohonk Preserve (30min) and more.'
+      description: 'We are conveniently located minutes from downtown Newburgh, and just over the bridge from the Beacon train station.'
     },
     {
       ownerId: 1,
@@ -46,7 +46,7 @@ module.exports = {
       lng: 1.23,
       name: 'Cozy Home',
       price: 160.00,
-      description: "Relax & Rejuvenate w/ panoramic views of White Mountains from any of the 4 decks of Kailaśa Chalet! Perched on top of a mountain overlooking Mt Chocorua & Silver Lake w/ majestic views of Mt Washington Valley. So easy to get lost in the beauty of Kailaśa!"
+      description: "Relax & Rejuvenate w/ panoramic views of White Mountains from any of the 4 decks of Kailaśa Chalet!"
     },
     {
       ownerId: 2,
@@ -70,7 +70,7 @@ module.exports = {
       lng: 13.13,
       name: 'Paradise in York',
       price: 690,
-      description: 'This vast 6 bedroom property offers you everything you need for your dream vacation: Superb 180 degree ocean view, 3 terrasses, grill, heated pool, hot tub, pool and air hockey tables, fire pit, interior fireplace, fenced area for dogs, 9 tvs, 2 sets of dishwashers, 2 sets of washer/dryer, Keurig machine on every floor, main floor adapted for wheelchairs, etc.'
+      description: 'This vast 6 bedroom property offers you everything you need for your dream vacation: Superb 180 degree ocean view, 3 terrasses'
     },
     {
       ownerId: 2,
