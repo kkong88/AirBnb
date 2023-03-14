@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { createSpot, getDetail } from '../../store/spot'
 import { updateSpot } from '../../store/spot'
-
+import { useModal } from "../../context/Modal";
 
 
 function UpdateSpot({spot}) {
@@ -22,6 +22,7 @@ function UpdateSpot({spot}) {
     const [image4, setImage4] = useState(spot.image3)
     const [errors, setErrors] = useState([])
     const history = useHistory()
+    const { closeModal } = useModal();
     const { id } = useParams()
 
     const handleImages = (e) => {
@@ -59,18 +60,22 @@ function UpdateSpot({spot}) {
         if(!city.length) validationError.push('City is Required')
         if(!state.length) validationError.push('State is Required')
         if(description.length <= 30) validationError.push('Description must be a minimum of 30 characters')
-        if(!previewImage.length) validationError.push('Preview Image is required')
+        //if(!previewImage.length) validationError.push('Preview Image is required')
 
         setErrors(validationError)
         if(validationError.length) return
 
-        const payload = { name, state, country, city, address, description, price, images:[previewImage,image1,image2,image3,image4] }
+
+        //images:[previewImage,image1,image2,image3,image4] put in payload if wanted to add image during update
+
+        const payload = { name, state, country, city, address, description, price }
         const newSpot = await dispatch(updateSpot(spot.id,payload))
          if(newSpot){
             const spotId = newSpot.id
             // payload.images.forEach( async(imageUrl, index) => {
             //     if(imageUrl.trim() !== "") await dispatch(createSpot(spotId,imageUrl,index))
             // })
+            closeModal()
             await dispatch(getDetail(spotId))
            history.push(`/spot/${spotId}`)
          }
@@ -164,18 +169,17 @@ function UpdateSpot({spot}) {
             />
         </label>
         </li>
-        <li>
+        {/* <li>
         <label>image
             <input
             type='text'
             name='previewImage'
             placeholder='Preview Image is Required'
             onChange={handleImages}
-
             />
         </label>
-        </li>
-        <button type="submit">Create</button>
+        </li> */}
+        <button type="submit">Submit</button>
         </form>
         </>
     )
